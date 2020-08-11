@@ -1,0 +1,52 @@
+#teapotcontainer {
+  .eye {
+     transform-origin: 0% 65%;
+     animation: blink 3s;
+     animation-iteration-count: infinite;
+     transition-timing-function: ease-in-out;
+   }
+ 
+   .mouth {
+     animation: breath 3s;
+     animation-iteration-count: infinite;
+     transition-timing-function: ease;
+   }
+ 
+ }
+ 
+ 
+ @keyframes breath {
+   0% {
+       transform-origin: 50% 100%;
+       transform: scaleX(1) scaleY(1);
+   }
+   50% {
+       transform-origin: 50% 100%;
+       transform: scaleX(1.05) scaleY(0.95);
+   }
+   100% {
+       transform-origin: 50% 100%;
+       transform: scaleX(1) scaleY(1);
+   }
+ }
+ 
+ 
+ 
+ @keyframes blink {
+   0% {
+       
+       transform: scaleY(1);
+   }
+   70% {
+       transform: scaleY(1);
+   }
+   80% {
+       transform: scaleY(0.2);
+   }
+   90% {
+       transform: scaleY(1);
+   }
+   100% {
+       transform: scaleY(1);
+   }
+ }
