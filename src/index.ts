@@ -1,4 +1,5 @@
 import Application, { ApplicationConfiguration } from "./Application";
+import sandbox from "../sandbox";
 
 const appContainer = document.getElementById("app") as HTMLElement;
 
@@ -27,8 +28,8 @@ const conf: ApplicationConfiguration = {
   mapUrl:
     "https://cdn.discordapp.com/attachments/437009603948183553/739789849942425630/Maison_de_Nolae.jpg",
   pinSpriteUrl: "http://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png",
-  wsendpoint: "wss://xkjbd.sse.codesandbox.io",
-  backendendpoint: "https://xkjbd.sse.codesandbox.io",
+  wsendpoint: sandbox.wsendpoint,
+  backendendpoint: sandbox.backendendpoint,
   canvas: document.getElementById("kanvas") as HTMLCanvasElement,
   pseudo: document.getElementById("pseudo") as HTMLInputElement,
   nope: document.getElementById("nope") as HTMLInputElement,
