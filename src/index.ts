@@ -1,5 +1,5 @@
 import Application, { ApplicationConfiguration } from "./Application";
-import sandbox from "../sandbox";
+import sandbox from "../.config/endpoint";
 
 const appContainer = document.getElementById("app") as HTMLElement;
 
