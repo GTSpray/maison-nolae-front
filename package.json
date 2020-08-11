@@ -1,5 +1,5 @@
 {
-  "name": "maison-nolae",
+  "name": "maison-nolae-front",
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
@@ -11,6 +11,7 @@
     "@types/ajv-keywords": "3.4.0",
     "ajv": "6.12.3",
     "express": "4.17.1",
+    "ping.js": "0.2.3",
     "rxjs": "6.6.2"
   },
   "devDependencies": {

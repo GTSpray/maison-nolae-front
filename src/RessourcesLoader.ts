@@ -1,3 +1,5 @@
+import Ping from "ping.js";
+
 declare var ActiveXObject: (type: string) => void;
 
 export enum HttpMethod {
@@ -105,6 +107,18 @@ export default class RessourcesLoader {
           break;
         }
       }
+    });
+  }
+
+  static ping(url: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const p = new Ping();
+      p.ping(url, (err: any, data: any) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(true);
+      });
     });
   }
 

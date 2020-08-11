@@ -144,12 +144,9 @@ export default class Application {
   private async load() {
     try {
       // should wakeup...
-      await RessourcesLoader.httpRequest({
-        method: HttpMethod.GET,
-        url: `${this._config.backendendpoint}`,
-        timeout: 2000
-      });
+      await RessourcesLoader.ping(`${this._config.backendendpoint}`);
     } catch (error) {
+      console.error(error);
       throw new Error("Backend is sleeping");
     }
 
