@@ -3,7 +3,7 @@
 @import './button.scss';
 @import '/input-text.scss';
 
-html {
+html, body {
   position: absolute;
   top: 0;
   left:0;
@@ -11,37 +11,34 @@ html {
   bottom: 0;
   overflow: auto;
 
-
   .noevent {
     pointer-events: none;
   }
 
-  body {
-    position: relative;  
-    #app {
-      display: none;
-      #kanvas {
-        z-index: 1;
-        position: absolute;
-        top: 0;
-        left: 0;
+  #app {
+    display: none;
+    #kanvas {
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #panel {
+      margin: 1em;
+      z-index: 2;
+      position: fixed;
+
+      > * {
+        vertical-align: middle;
+        display: inline-block;
       }
-      #panel {
-        margin: 1em;
-        z-index: 2;
-        position: fixed;
+
+      .indicator {
+        margin: .5em 0;
+      }
+
+      
+    }
+  }    
   
-        > * {
-          vertical-align: middle;
-          display: inline-block;
-        }
-
-        .indicator {
-          margin: .5em 0;
-        }
-
-        
-      }
-    }    
-  }
 }

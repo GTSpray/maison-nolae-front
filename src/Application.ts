@@ -53,7 +53,7 @@ export default class Application {
     }
   }
 
-  async start() {
+  async start(): Promise<boolean> {
     try {
       await this.load();
 
@@ -136,9 +136,12 @@ export default class Application {
       playerList.forEach((player) => {
         house.set(player, pinSprite);
       });
+
+      return true;
     } catch (error) {
-      throw error;
+      console.error(error);
     }
+    return false;
   }
 
   private async load() {

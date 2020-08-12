@@ -113,9 +113,9 @@ export default class RessourcesLoader {
   static ping(url: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const p = new Ping();
-      p.ping(url, (err: any, data: any) => {
+      p.ping(url, (err: any) => {
         if (err) {
-          reject(err);
+          reject(new Error(`ping failed to ${url}`));
         }
         resolve(true);
       });
