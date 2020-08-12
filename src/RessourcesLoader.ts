@@ -110,18 +110,6 @@ export default class RessourcesLoader {
     });
   }
 
-  static ping(url: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const p = new Ping();
-      p.ping(url, (err: any) => {
-        if (err) {
-          reject(new Error(`ping failed to ${url}`));
-        }
-        resolve(true);
-      });
-    });
-  }
-
   static loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const image = new Image();

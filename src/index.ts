@@ -39,11 +39,9 @@ const conf: ApplicationConfiguration = {
 const app = new Application(conf);
 app
   .start()
-  .then((started) => {
-    if (started) {
-      const loader = document.getElementById("teapotcontainer") as HTMLElement;
-      loader.style.display = "none";
-      appContainer.style.display = "block";
-    }
+  .then(() => {
+    const loader = document.getElementById("teapotcontainer") as HTMLElement;
+    loader.style.display = "none";
+    appContainer.style.display = "block";
   })
   .catch((err) => console.error(err));

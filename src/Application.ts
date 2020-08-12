@@ -53,106 +53,91 @@ export default class Application {
     }
   }
 
-  async start(): Promise<boolean> {
-    try {
-      await this.load();
+  async start() {
+    await this.load();
 
-      const house = (this._house = await Map2D.load(this._config.mapUrl));
-      this._config.canvas.height = this._house.texture.height;
-      this._config.canvas.width = this._house.texture.width;
+    const house = (this._house = await Map2D.load(this._config.mapUrl));
+    this._config.canvas.height = this._house.texture.height;
+    this._config.canvas.width = this._house.texture.width;
 
-      const ctx: CanvasRenderingContext2D = this._config.canvas.getContext(
-        "2d"
-      ) as CanvasRenderingContext2D;
+    const ctx: CanvasRenderingContext2D = this._config.canvas.getContext(
+      "2d"
+    ) as CanvasRenderingContext2D;
 
-      const animation = new Animation(15);
-      animation.event.subscribe(() => house.refresh(ctx));
-      animation.start();
+    const animation = new Animation(15);
+    animation.event.subscribe(() => house.refresh(ctx));
+    animation.start();
 
-      // setInterval(() => house.refresh(ctx), 10000 / 60);
+    // setInterval(() => house.refresh(ctx), 10000 / 60);
 
-      this._ws.connect(this._config.wsendpoint);
+    this._ws.connect(this._config.wsendpoint);
 
-      this._ui.click.subscribe((position) => {
-        const newMe = {
-          ...this._me,
-          ...position
-        };
-        if (ajv.validate(this._apiContracts["player"], newMe)) {
-          this._me = newMe;
-          this._ws.send(this._me);
-        }
-      });
+    this._ui.click.subscribe((position) => {
+      const newMe = {
+        ...this._me,
+        ...position
+      };
+      if (ajv.validate(this._apiContracts["player"], newMe)) {
+        this._me = newMe;
+        this._ws.send(this._me);
+      }
+    });
 
-      this._ui.pseudo.subscribe((pseudo) => {
-        const newMe = {
-          ...this._me,
-          pseudo
-        };
-        if (ajv.validate(this._apiContracts["player"], newMe)) {
-          this._me = newMe;
-          this._ws.send(this._me);
-        }
-      });
+    this._ui.pseudo.subscribe((pseudo) => {
+      const newMe = {
+        ...this._me,
+        pseudo
+      };
+      if (ajv.validate(this._apiContracts["player"], newMe)) {
+        this._me = newMe;
+        this._ws.send(this._me);
+      }
+    });
 
-      this._ui.event.subscribe((e) => {
-        switch (e.type) {
-          case "pseudo":
-            this._config.nope.checked = ajv.validate(
-              this._apiContracts["player"]["properties"]["pseudo"],
-              this._config.pseudo.value
-            ) as boolean;
-            break;
-        }
-      });
+    this._ui.event.subscribe((e) => {
+      switch (e.type) {
+        case "pseudo":
+          this._config.nope.checked = ajv.validate(
+            this._apiContracts["player"]["properties"]["pseudo"],
+            this._config.pseudo.value
+          ) as boolean;
+          break;
+      }
+    });
 
-      this._ws.event.subscribe((e) => {
-        switch (e.type) {
-          case "close":
-            this._config.uiactive.checked = false;
-            this._ui.desable();
-            break;
-          case "open":
-            this._config.uiactive.checked = true;
-            this._ui.enable();
-            break;
-        }
-      });
+    this._ws.event.subscribe((e) => {
+      switch (e.type) {
+        case "close":
+          this._config.uiactive.checked = false;
+          this._ui.desable();
+          break;
+        case "open":
+          this._config.uiactive.checked = true;
+          this._ui.enable();
+          break;
+      }
+    });
 
-      const pinSprite = await RessourcesLoader.loadImage(
-        this._config.pinSpriteUrl
-      );
+    const pinSprite = await RessourcesLoader.loadImage(
+      this._config.pinSpriteUrl
+    );
 
-      this._ws.player.subscribe((player) => {
-        house.set(player, pinSprite);
-      });
+    this._ws.player.subscribe((player) => {
+      house.set(player, pinSprite);
+    });
 
-      const playerList: Player[] = (await RessourcesLoader.httpRequest({
-        method: HttpMethod.GET,
-        url: `${this._config.backendendpoint}/players`,
-        responseType: "json"
-      })) as Player[];
+    const playerList: Player[] = (await RessourcesLoader.httpRequest({
+      method: HttpMethod.GET,
+      url: `${this._config.backendendpoint}/players`,
+      responseType: "json"
+    })) as Player[];
 
-      playerList.forEach((player) => {
-        house.set(player, pinSprite);
-      });
-
-      return true;
-    } catch (error) {
-      console.error(error);
-    }
-    return false;
+    playerList.forEach((player) => {
+      house.set(player, pinSprite);
+    });
   }
 
   private async load() {
-    try {
-      // should wakeup...
-      await RessourcesLoader.ping(`${this._config.backendendpoint}`);
-    } catch (error) {
-      console.error(error);
-      throw new Error("Backend is sleeping");
-    }
-
     try {
       this._apiContracts = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
