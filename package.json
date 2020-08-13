@@ -7,6 +7,9 @@
     "start": "parcel index.html --",
     "build": "parcel build index.html --public-url ./"
   },
+  "browserslist": [
+      "last 1 Chrome versions"
+  ],
   "dependencies": {
     "@types/ajv-keywords": "3.4.0",
     "ajv": "6.12.3",
