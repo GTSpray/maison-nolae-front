@@ -1,4 +1,4 @@
 export default {
-  wsendpoint: "wss://xkjbd.sse.codesandbox.io",
-  backendendpoint: "https://xkjbd.sse.codesandbox.io"
+  wsendpoint: "wss://maison-nolae-back.herokuapp.com",
+  backendendpoint: "https://maison-nolae-back.herokuapp.com"
 };
