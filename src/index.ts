@@ -27,7 +27,7 @@ appContainer.innerHTML = `
 const conf: ApplicationConfiguration = {
   mapUrl:
     "https://cdn.discordapp.com/attachments/437009603948183553/739789849942425630/Maison_de_Nolae.jpg",
-  pinSpriteUrl: "http://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png",
+  pinSpriteUrl: "https://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png",
   wsendpoint: sandbox.wsendpoint,
   backendendpoint: sandbox.backendendpoint,
   canvas: document.getElementById("kanvas") as HTMLCanvasElement,
