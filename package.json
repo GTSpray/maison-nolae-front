@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.html",
   "scripts": {
+    "heroku-prebuild": "rm -rf .cache dist",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
-    "build": "parcel build index.html --public-url ./"
+    "build": "parcel build index.html --public-url ./ --no-source-maps"
   },
   "browserslist": ["last 1 Chrome versions"],
   "dependencies": {
