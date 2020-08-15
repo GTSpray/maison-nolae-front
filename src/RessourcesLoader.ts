@@ -98,6 +98,10 @@ export default class RessourcesLoader {
         }
         default: {
           xhr.open(opts.method, opts.url);
+          xhr.setRequestHeader(
+            "Content-Type",
+            "application/json;charset=UTF-8"
+          );
           if (opts.headers) {
             Object.keys(opts.headers).forEach((key) =>
               xhr.setRequestHeader(key, opts.headers[key])
