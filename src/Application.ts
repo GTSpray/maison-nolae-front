@@ -147,5 +147,23 @@ export default class Application {
     } catch (error) {
       throw new Error("Unable to load api contracts");
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('code')){
+      try {
+        const auth = await RessourcesLoader.httpRequest({
+          method: HttpMethod.POST,
+          url: `${this._config.backendendpoint}/auth`,
+          responseType: "json",
+          params: {
+            code : urlParams.get('code')
+          }
+        });
+        console.log(auth);
+      } catch (error) {
+        console.error(error);
+        throw new Error("Unable to auth");
+      }
+    }
   }
 }

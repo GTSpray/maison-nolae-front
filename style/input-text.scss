@@ -1,15 +1,3 @@
-/* ====================================================
-Recreating the email field from https://webflow.com/cms. Just an experiment - not as cross-browser friendly as the original.
-Changed:
-- animated gradient bar to :after element
-- flexbox for layout
-==================================================== */
-
-// reset
-
-input { border-style: none; background: transparent; outline: none; }
-button { padding: 0; background: none; border: none; outline: none; }
-
 // colors
 $input-background: rgba(57, 63, 84, 0.8);
 $input-text-inactive: #7881A1;
@@ -46,26 +34,31 @@ $input-text-active: #BFD2FF;
     background-size: 500% auto;
     animation: gradient 3s linear infinite;
   }
-}
 
-.webflow-style-input input {
-  flex-grow: 1;
-  color: $input-text-active;
-  font-size: 1.8rem;
-  line-height: 2.4rem;
-  vertical-align: middle;
-  &::-webkit-input-placeholder {
-    color: $input-text-inactive;
-  }
-}
 
-.webflow-style-input button {
-  color:  $input-text-inactive;
-  font-size: 2.4rem;
-  line-height: 2.4rem;
-  vertical-align: middle;
-  transition: color .25s;
-  &:hover {
+input { border-style: none; background: transparent; outline: none; }
+button { padding: 0; background: none; border: none; outline: none; }
+
+  input {
+    flex-grow: 1;
     color: $input-text-active;
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    &::-webkit-input-placeholder {
+      color: $input-text-inactive;
+    }
+  }
+
+  button, a {
+    text-align: center;
+    color:  $input-text-inactive;
+    font-size: 2.4rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    transition: color .25s;
+    &:hover {
+      color: $input-text-active;
+    }
   }
 }
