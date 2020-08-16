@@ -159,7 +159,8 @@ export default class Application {
             code : urlParams.get('code')
           }
         });
-        console.log(auth);
+        this._config.pseudo.value = auth.pseudo;
+        this._me.id=auth.id;
       } catch (error) {
         console.error(error);
         throw new Error("Unable to auth");

@@ -15,6 +15,12 @@ html, body {
     pointer-events: none;
   }
 
+  #teapotcontainer {
+    #login {
+      padding-bottom: 2em;
+    }
+  }
+
   #app {
     display: none;
     #kanvas {

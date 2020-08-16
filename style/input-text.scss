@@ -10,6 +10,7 @@ $input-text-active: #BFD2FF;
 }
 
 .webflow-style-input {
+  display:none;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -36,8 +37,18 @@ $input-text-active: #BFD2FF;
   }
 
 
-input { border-style: none; background: transparent; outline: none; }
-button { padding: 0; background: none; border: none; outline: none; }
+  input { 
+    border-style: none;
+    background: transparent;
+    outline: none;
+  }
+  
+  button { 
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+  }
 
   input {
     flex-grow: 1;

@@ -1,0 +1,22 @@
+version: '3'
+services:
+    http-server:
+        image: "node:10.21.0"
+        working_dir: /home/node/app
+        volumes:
+        - ./:/home/node/app
+        command: "npm run start:dev"
+        depends_on: 
+        - parcel
+        ports:
+        - 8080:8080
+        environment:
+        - NODE_ENV=production
+        - PORT=8080
+    parcel:
+        image: "node:10.21.0"
+        working_dir: /home/node/app
+        volumes:
+        - ./:/home/node/app
+        command: "npm run build:dev"
+    
