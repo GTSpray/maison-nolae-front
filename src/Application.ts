@@ -69,7 +69,7 @@ export default class Application {
     animation.event.subscribe(() => house.refresh(ctx));
     animation.start();
 
-    this._ws.connect(this._config.wsendpoint, this._token);
+    this._ws.connect(this._config.wsendpoint, this._apiContracts.websocket);
 
     this._ui.click.subscribe((position) => {
       const newMe = {

@@ -86,7 +86,7 @@ export default class WS {
     if (this._ws) {
       try {
         const event = JSON.stringify(data);
-        if (ajv.validate(this._contract, event)) {
+        if (ajv.validate(this._contract, data)) {
           this._ws.send(event);
         }
       } catch (error) {}
