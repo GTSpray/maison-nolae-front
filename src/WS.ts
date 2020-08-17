@@ -76,6 +76,8 @@ export default class WS {
   connect(endpoint: string, token: string) {
     if (this._endpoint === endpoint) {
       this._tries++;
+    } else {
+      this._endpoint = endpoint;
     }
 
     this._token = token;
