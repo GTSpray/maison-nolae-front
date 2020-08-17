@@ -13,12 +13,17 @@ export default class WS {
   private _playerSub: Subject<Player>;
 
   private _contract: any;
+  private _token: string;
+
+  private _endpoint: string;
+  private _tries: number;
 
   constructor() {
     if (!("WebSocket" in window)) {
       throw Error("No WebSocket");
     }
     this._ws = null;
+    this._tries = 0;
 
     const subPlayer: Subject<Player> = new Subject();
     this._player = new Observable((sub) => {
@@ -35,6 +40,26 @@ export default class WS {
       });
     });
     this._webSocketSub = subWs;
+
+    this._websocket.subscribe((evnt) => {
+      switch (evnt.type) {
+        case "open":
+          this._tries = 0;
+          this.send({
+            type: "authentication",
+            payload: {
+              token: this._token
+            }
+          });
+          break;
+        case "close":
+          if (this._tries < 3) {
+            this.connect(this._endpoint, this._token);
+            this._tries++;
+          }
+          break;
+      }
+    });
   }
 
   get event() {
@@ -49,6 +74,11 @@ export default class WS {
     this._contract = contract;
   }
   connect(endpoint: string, token: string) {
+    if (this._endpoint === endpoint) {
+      this._tries++;
+    }
+
+    this._token = token;
     this._ws = new WebSocket(endpoint);
     const wsSub = this._webSocketSub;
     this._ws.onmessage = (evt) => {
@@ -61,17 +91,6 @@ export default class WS {
     this._ws.onerror = this._ws.onopen = this._ws.onclose = (evt: Event) => {
       wsSub.next(evt);
     };
-
-    wsSub.subscribe((evnt) => {
-      if (evnt.type === "open") {
-        this.send({
-          type: "authentication",
-          payload: {
-            token
-          }
-        });
-      }
-    });
   }
 
   disconnect() {
