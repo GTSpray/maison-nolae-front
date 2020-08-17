@@ -85,12 +85,16 @@ export default class WS {
   send(data: Object) {
     if (this._ws) {
       try {
-        const event = JSON.stringify(data);
         if (ajv.validate(this._contract, data)) {
+          const event = JSON.stringify(data);
           this._ws.send(event);
+          this._webSocketSub.next(new Event("sent"));
+        } else {
+          this._webSocketSub.next(new Event("error"));
         }
-      } catch (error) {}
-      this._webSocketSub.next(new Event("sent"));
+      } catch (error) {
+        this._webSocketSub.next(new Event("erro"));
+      }
     } else {
       this._webSocketSub.next(new Event("disconnected"));
     }
