@@ -45,7 +45,7 @@ app
     appContainer.style.display = "block";
   })
   .catch((err) => {
-    loader.style.display = "block";
+    loader.style.display = "flex";
     appContainer.style.display = "none";
     console.error(err);
   });
