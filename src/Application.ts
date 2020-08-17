@@ -3,9 +3,9 @@ import Map2D from "./Map2D";
 import WS from "./WS";
 import RessourcesLoader, { HttpMethod } from "./RessourcesLoader";
 import UserInteraction from "./UserInteraction";
+import Animation from "./Animation";
 
 import Ajv from "ajv";
-import Animation from "./Animation";
 const ajv = new Ajv();
 
 export interface ApplicationConfiguration {
@@ -30,6 +30,7 @@ export default class Application {
   private _config: ApplicationConfiguration;
 
   private _apiContracts: any;
+  private _token: string;
 
   constructor(config: ApplicationConfiguration) {
     this._me = {
@@ -41,7 +42,7 @@ export default class Application {
 
     this._config = config;
 
-    this._ws = new WS(config.wsendpoint);
+    this._ws = new WS();
     this._ui = new UserInteraction({
       clickArea: this._config.canvas,
       pseudo: this._config.pseudo
@@ -79,7 +80,10 @@ export default class Application {
       };
       if (ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
-        this._ws.send(this._me);
+        this._ws.send({
+          type: "player",
+          payload: this._me
+        });
       }
     });
 
@@ -90,7 +94,10 @@ export default class Application {
       };
       if (ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
-        this._ws.send(this._me);
+        this._ws.send({
+          type: "player",
+          payload: this._me
+        });
       }
     });
 
@@ -149,18 +156,20 @@ export default class Application {
     }
 
     const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get('code')){
+    const discordAuthCode = urlParams.get("code");
+    if (discordAuthCode) {
+      window.history.pushState({}, document.title, "/");
       try {
         const auth = await RessourcesLoader.httpRequest({
           method: HttpMethod.POST,
           url: `${this._config.backendendpoint}/auth`,
           responseType: "json",
           params: {
-            code : urlParams.get('code')
+            code: discordAuthCode
           }
         });
-        this._config.pseudo.value = auth.pseudo;
-        this._me.id=auth.id;
+        this._me = auth.player;
+        this._token = auth.token;
       } catch (error) {
         console.error(error);
         throw new Error("Unable to auth");

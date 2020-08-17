@@ -1,6 +1,9 @@
 import Player from "./Player";
 import { Observable, Subject } from "rxjs";
 
+import Ajv from "ajv";
+const ajv = new Ajv();
+
 export default class WS {
   private _ws: WebSocket | null;
   private _websocket: Observable<Event>;
@@ -9,7 +12,9 @@ export default class WS {
   private _player: Observable<Player>;
   private _playerSub: Subject<Player>;
 
-  constructor(endpoint: string) {
+  private _contract: any;
+
+  constructor() {
     if (!("WebSocket" in window)) {
       throw Error("No WebSocket");
     }
@@ -40,7 +45,10 @@ export default class WS {
     return this._player;
   }
 
-  connect(endpoint: string) {
+  set contract(contract: any) {
+    this._contract = contract;
+  }
+  connect(endpoint: string, token: string) {
     this._ws = new WebSocket(endpoint);
     const wsSub = this._webSocketSub;
     this._ws.onmessage = (evt) => {
@@ -53,6 +61,17 @@ export default class WS {
     this._ws.onerror = this._ws.onopen = this._ws.onclose = (evt: Event) => {
       wsSub.next(evt);
     };
+
+    wsSub.subscribe((evnt) => {
+      if (evnt.type === "open") {
+        this._ws.send({
+          type: "authentication",
+          payload: {
+            token
+          }
+        });
+      }
+    });
   }
 
   disconnect() {
@@ -65,7 +84,12 @@ export default class WS {
 
   send(data: Object) {
     if (this._ws) {
-      this._ws.send(JSON.stringify(data));
+      try {
+        const event = JSON.stringify(data);
+        if (ajv.validate(this._contract, event)) {
+          this._ws.send(event);
+        }
+      } catch (error) {}
       this._webSocketSub.next(new Event("sent"));
     } else {
       this._webSocketSub.next(new Event("disconnected"));
