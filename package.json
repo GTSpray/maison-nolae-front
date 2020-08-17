@@ -11,7 +11,7 @@
     "build": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem"
   },
-
+  
   "browserslist": ["last 1 Chrome versions"],
   "dependencies": {
     "@types/ajv-keywords": "3.4.0",
