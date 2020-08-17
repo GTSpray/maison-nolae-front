@@ -2,6 +2,7 @@ import Application, { ApplicationConfiguration } from "./Application";
 import sandbox from "../.config/endpoint";
 
 const appContainer = document.getElementById("app") as HTMLElement;
+const loader = document.getElementById("teapotcontainer") as HTMLElement;
 
 appContainer.innerHTML = `
   <canvas id="kanvas"></canvas>
@@ -40,8 +41,11 @@ const app = new Application(conf);
 app
   .start()
   .then(() => {
-    const loader = document.getElementById("teapotcontainer") as HTMLElement;
     loader.style.display = "none";
     appContainer.style.display = "block";
   })
-  .catch((err) => console.error(err));
+  .catch((err) => {
+    loader.style.display = "block";
+    appContainer.style.display = "none";
+    console.error(err);
+  });

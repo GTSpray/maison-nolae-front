@@ -174,6 +174,8 @@ export default class Application {
         console.error(error);
         throw new Error("Unable to auth");
       }
+    } else {
+      throw Error("No autent");
     }
   }
 }
