@@ -64,7 +64,7 @@ export default class WS {
 
     wsSub.subscribe((evnt) => {
       if (evnt.type === "open") {
-        this._ws.send({
+        this.send({
           type: "authentication",
           payload: {
             token
