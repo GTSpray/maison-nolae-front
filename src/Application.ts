@@ -70,7 +70,7 @@ export default class Application {
     animation.start();
 
     this._ws.contract = this._apiContracts.websocket;
-    this._ws.connect(this._config.wsendpoint, this._apiContracts.token);
+    this._ws.connect(this._config.wsendpoint, this._token);
 
     this._ui.click.subscribe((position) => {
       const newMe = {
