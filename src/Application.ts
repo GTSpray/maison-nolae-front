@@ -69,9 +69,7 @@ export default class Application {
     animation.event.subscribe(() => house.refresh(ctx));
     animation.start();
 
-    // setInterval(() => house.refresh(ctx), 10000 / 60);
-
-    this._ws.connect(this._config.wsendpoint);
+    this._ws.connect(this._config.wsendpoint, this._token);
 
     this._ui.click.subscribe((position) => {
       const newMe = {
@@ -168,7 +166,9 @@ export default class Application {
             code: discordAuthCode
           }
         });
-        this._me = auth.player;
+        this._me.id = auth.player.id;
+        this._me.pseudo = auth.player.pseudo;
+        this._config.pseudo.value = auth.player.pseudo;
         this._token = auth.token;
       } catch (error) {
         console.error(error);
