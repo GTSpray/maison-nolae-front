@@ -11,7 +11,20 @@
     "build": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem"
   },
-  
+  "pwaManifest": {
+    "name": "Maison de Nolae",
+    "shortName": "NoNoHouse",
+    "description": "La carte interractive dont on a tous besoin pour se reperrer dans cette maison magique",
+    "theme": "#393b44",
+    "backgroundColor": "#616576",
+    "startURL": "/",
+    "display": "fullscreen",
+    "generateIconOptions": {
+      "baseIcon": "./teapot.svg",
+      "sizes": [36, 48, 72,96, 144, 192, 384, 512],
+      "genFavicons": true
+    }  
+  },
   "browserslist": ["last 1 Chrome versions"],
   "dependencies": {
     "@types/ajv-keywords": "3.4.0",
@@ -25,7 +38,8 @@
     "node": "10.21.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.6.1"
+    "parcel-bundler": "^1.6.1",
+    "parcel-plugin-pwa-manifest": "^3.0.10"
   },
   "keywords": []
 }
