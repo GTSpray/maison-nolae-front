@@ -90,10 +90,10 @@ export default class WS {
           this._ws.send(event);
           this._webSocketSub.next(new Event("sent"));
         } else {
-          this._webSocketSub.next(new Event("error"));
+          console.error("Ajv invalid websocket event");
         }
       } catch (error) {
-        this._webSocketSub.next(new Event("erro"));
+        console.error("fail to stringify websocket event");
       }
     } else {
       this._webSocketSub.next(new Event("disconnected"));
