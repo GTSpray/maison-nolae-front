@@ -7,7 +7,6 @@ const appContainer = document.getElementById("app") as HTMLElement;
 const loader = document.getElementById("teapotcontainer") as HTMLElement;
 const oauthLink = document.getElementById("discord") as HTMLLinkElement;
 
-oauthLink.href = process.env.discord_oauth_link as string;
 appContainer.innerHTML = `
   <canvas id="kanvas"></canvas>
   <div id="panel">
@@ -29,11 +28,21 @@ appContainer.innerHTML = `
   </div>
 `;
 
+
+const wsendpoint="wss://maison-nolae-back.herokuapp.com",
+backendendpoint="https://maison-nolae-back.herokuapp.com",
+discord_oauth_link="https://discord.com/api/oauth2/authorize?client_id=743536530319998986&redirect_uri=https%3A%2F%2Fmaison-nolae.herokuapp.com&response_type=code&scope=identify%20guilds",
+mapurl="https://cdn.discordapp.com/attachments/437009603948183553/739789849942425630/Maison_de_Nolae.jpg",
+pinspriteurl="https://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png";
+
+
+oauthLink.href = discord_oauth_link as string;
+
 const conf: ApplicationConfiguration = {
-  mapUrl: process.env.mapurl as string,
-  pinSpriteUrl: process.env.pinspriteurl as string,
-  wsendpoint: process.env.wsendpoint as string,
-  backendendpoint: process.env.backendendpoint as string,
+  mapUrl: mapurl as string,
+  pinSpriteUrl: pinspriteurl as string,
+  wsendpoint: wsendpoint as string,
+  backendendpoint: backendendpoint as string,
   canvas: document.getElementById("kanvas") as HTMLCanvasElement,
   pseudo: document.getElementById("pseudo") as HTMLInputElement,
   nope: document.getElementById("nope") as HTMLInputElement,
