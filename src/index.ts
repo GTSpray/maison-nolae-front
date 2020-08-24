@@ -1,13 +1,12 @@
-import dotenv from "dotenv";
 import Application, { ApplicationConfiguration } from "./Application";
 
-dotenv.config();
 
 const appContainer = document.getElementById("app") as HTMLElement;
 const loader = document.getElementById("teapotcontainer") as HTMLElement;
-const oauthLink = document.getElementById("discord") as HTMLLinkElement;
 
+const oauthLink = document.getElementById("discord") as HTMLLinkElement;
 oauthLink.href = process.env.discord_oauth_link as string;
+
 appContainer.innerHTML = `
   <canvas id="kanvas"></canvas>
   <div id="panel">
@@ -28,6 +27,7 @@ appContainer.innerHTML = `
     </div>
   </div>
 `;
+
 
 const conf: ApplicationConfiguration = {
   mapUrl: process.env.mapurl as string,
