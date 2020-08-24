@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
 import Application, { ApplicationConfiguration } from "./Application";
-import sandbox from "../.config/endpoint";
+
+dotenv.config();
 
 const appContainer = document.getElementById("app") as HTMLElement;
 const loader = document.getElementById("teapotcontainer") as HTMLElement;
+const oauthLink = document.getElementById("discord") as HTMLLinkElement;
 
+oauthLink.href = process.env.discord_oauth_link as string;
 appContainer.innerHTML = `
   <canvas id="kanvas"></canvas>
   <div id="panel">
@@ -26,11 +30,10 @@ appContainer.innerHTML = `
 `;
 
 const conf: ApplicationConfiguration = {
-  mapUrl:
-    "https://cdn.discordapp.com/attachments/437009603948183553/739789849942425630/Maison_de_Nolae.jpg",
-  pinSpriteUrl: "https://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png",
-  wsendpoint: sandbox.wsendpoint,
-  backendendpoint: sandbox.backendendpoint,
+  mapUrl: process.env.mapurl as string,
+  pinSpriteUrl: process.env.pinspriteurl as string,
+  wsendpoint: process.env.wsendpoint as string,
+  backendendpoint: process.env.backendendpoint as string,
   canvas: document.getElementById("kanvas") as HTMLCanvasElement,
   pseudo: document.getElementById("pseudo") as HTMLInputElement,
   nope: document.getElementById("nope") as HTMLInputElement,

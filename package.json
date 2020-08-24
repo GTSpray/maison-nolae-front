@@ -1,15 +1,17 @@
 {
   "name": "maison-nolae-front",
   "version": "1.0.0",
-  "description": "",
   "main": "index.html",
+  "description": "Backend of Maison de Nolae project",
+  "license": "Beerware",
   "scripts": {
-    "heroku-prebuild": "rm -rf .cache dist",
+    "heroku-prebuild": "rm -rf .cache dist && node set_env.js",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
     "build:dev": "parcel serve index.html --public-url ./",
     "build": "parcel build index.html --public-url ./ --no-source-maps",
-    "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem"
+    "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
+    "preset:env": "node set_env.js"
   },
   "pwaManifest": {
     "name": "Maison de Nolae",
@@ -21,21 +23,34 @@
     "display": "fullscreen",
     "generateIconOptions": {
       "baseIcon": "./teapot.svg",
-      "sizes": [36, 48, 72,96, 144, 192, 384, 512],
+      "sizes": [
+        36,
+        48,
+        72,
+        96,
+        144,
+        192,
+        384,
+        512
+      ],
       "genFavicons": true
-    }  
+    }
   },
-  "browserslist": ["last 1 Chrome versions"],
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
   "dependencies": {
     "@types/ajv-keywords": "3.4.0",
+    "@types/node": "14.6.0",
     "ajv": "6.12.3",
+    "dotenv": "8.2.0",
     "http-server": "0.12.3",
     "rxjs": "6.6.2",
     "sass": "1.26.10",
     "typescript": "3.9.7"
   },
   "engines": {
-    "node": "10.21.0"
+    "node": ">=10.10.0"
   },
   "devDependencies": {
     "parcel-bundler": "^1.6.1",
