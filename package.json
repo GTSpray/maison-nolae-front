@@ -5,7 +5,7 @@
   "description": "Backend of Maison de Nolae project",
   "license": "Beerware",
   "scripts": {
-    "heroku-prebuild": "npm-run-all clean preset:env show:env",
+    "heroku-prebuild": "npm-run-all clean:build preset:env show:env",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
     "build:dev": "parcel serve index.html --public-url ./",
@@ -14,7 +14,7 @@
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js",
     "show:env": "node show_env.js",
-    "clean": "rm -rf .cache dist"
+    "clean:build": "rm -rf .cache dist"
   },
   "pwaManifest": {
     "name": "Maison de Nolae",
