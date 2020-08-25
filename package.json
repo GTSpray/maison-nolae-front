@@ -8,8 +8,8 @@
     "heroku-prebuild": "rm -rf .cache dist && node set_env.js",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
-    "build:dev": "parcel serve index.html --public-url ./",
-    "build": "dotenv parcel build index.html --public-url ./ --no-source-maps",
+    "build:dev": "parcel serve index.html --public-url ./ --target node",
+    "build": "parcel build index.html --public-url ./ --no-source-maps --target node",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js"
   },
@@ -53,7 +53,6 @@
     "node": ">=10.10.0"
   },
   "devDependencies": {
-    "dotenv-cli": "^3.2.0",
     "parcel-bundler": "^1.6.1",
     "parcel-plugin-pwa-manifest": "^3.0.10"
   },
