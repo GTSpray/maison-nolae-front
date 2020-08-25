@@ -8,8 +8,8 @@
     "heroku-prebuild": "rm -rf .cache dist && node set_env.js",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
-    "build:dev": "parcel serve index.html --public-url ./ --target node",
-    "build": "parcel build index.html --public-url ./ --no-source-maps --target node",
+    "build:dev": "parcel serve index.html --public-url ./",
+    "build": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js"
   },
