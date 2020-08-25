@@ -1,3 +1,3 @@
-const envSample = fs.readFileSync('.env', { encoding: 'utf8' })
+const envSample = require('fs').readFileSync('.env', { encoding: 'utf8' })
 
 console.log(envSample, process.env)
