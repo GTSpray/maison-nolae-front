@@ -5,7 +5,7 @@ const appContainer = document.getElementById("app") as HTMLElement;
 const loader = document.getElementById("teapotcontainer") as HTMLElement;
 
 const oauthLink = document.getElementById("discord") as HTMLLinkElement;
-oauthLink.href = discord_oauth_link || process.env.discord_oauth_link as string;
+oauthLink.href = process.env.discord_oauth_link as string;
 
 appContainer.innerHTML = `
   <canvas id="kanvas"></canvas>
