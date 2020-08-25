@@ -5,15 +5,14 @@
   "description": "Backend of Maison de Nolae project",
   "license": "Beerware",
   "scripts": {
-    "heroku-prebuild": "rm -rf .cache dist && node set_env.js",
+    "heroku-prebuild": "rm -rf .cache dist",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
     "build:dev": "parcel serve index.html --public-url ./",
-    "build": "npm-run-all show:env build:parcel",
+    "build": "npm-run-all clean:build preset:env build:parcel",
     "build:parcel": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js",
-    "show:env": "node show_env.js",
     "clean:build": "rm -rf .cache dist"
   },
   "pwaManifest": {

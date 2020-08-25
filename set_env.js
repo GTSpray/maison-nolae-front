@@ -13,8 +13,8 @@ while (m !== null) {
 }
 try {
   const content =  newLines.join('\n')
-    .replace(/\r\n/gm, "\n")    //normalize
-    .replace(/\n/gm,   "\r\n")  //CR+LF  -  Windows EOL
+    // .replace(/\r\n/gm, "\n")    //normalize
+    // .replace(/\n/gm,   "\r\n")  //CR+LF  -  Windows EOL
   fs.writeFileSync('.env', content, {flag:"w", encoding:"utf8"}); 
 } catch (err) {
   // An error occurred
