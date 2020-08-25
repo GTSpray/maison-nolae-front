@@ -1,8 +1,4 @@
 import Application, { ApplicationConfiguration } from "./Application";
-import dotenv from "dotenv";
-
-dotenv.config();
-
 
 const appContainer = document.getElementById("app") as HTMLElement;
 const loader = document.getElementById("teapotcontainer") as HTMLElement;
