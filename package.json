@@ -5,7 +5,7 @@
   "description": "Backend of Maison de Nolae project",
   "license": "Beerware",
   "scripts": {
-    "heroku-prebuild": "npm-run-all clean:build preset:env show:env",
+    "heroku-prebuild": "rm -rf .cache dist && node set_env.js",
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
     "build:dev": "parcel serve index.html --public-url ./",
