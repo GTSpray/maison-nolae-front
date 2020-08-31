@@ -3,5 +3,5 @@
   "hardReloadOnChange": true,
   "view": "browser",
   "template": "node",
-  "startScript": "yarn build:dev"
+  "startScript": "build:dev"
 }
