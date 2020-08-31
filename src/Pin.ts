@@ -1,15 +1,18 @@
+import Banner from "./banner/Banner";
+
 export default class Pin {
-  public _sprite: HTMLImageElement;
+  private _banner: Banner;
+  private _sprite: HTMLImageElement;
   private _width: number;
   private _height: number;
   private _x: number;
   private _y: number;
   private _text: string;
 
-  constructor(sprite: HTMLImageElement, text: string, w?: number, h?: number) {
-    this._sprite = sprite;
-    this._width = w ? w : sprite.width;
-    this._height = h ? h : sprite.height;
+  constructor(sprite: Banner, text: string, w: number, h: number) {
+    this._banner = sprite;
+    this._width = w;
+    this._height = h;
     this._x = 0;
     this._y = 0;
     this._text = text;
@@ -27,8 +30,10 @@ export default class Pin {
     return this._height;
   }
 
-  set text(text: string) {
+  async setText(text: string) {
     this._text = text;
+    this._banner.label = text;
+    this._sprite = await this._banner.compile();
   }
 
   get text() {

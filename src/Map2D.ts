@@ -1,6 +1,7 @@
 import RessourcesLoader from "./RessourcesLoader";
 import Pin from "./Pin";
 import Player from "./Player";
+import Banner from "./banner/Banner";
 
 export default class Map2D {
   static async load(url: string): Promise<Map2D> {
@@ -25,14 +26,14 @@ export default class Map2D {
     return this._texture;
   }
 
-  set(player: Player, pinSprite: HTMLImageElement) {
+  async set(player: Player, banner: Banner) {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
-        this.pins.set(id, new Pin(pinSprite, player.pseudo, 24, 40));
+        this.pins.set(id, new Pin(banner, player.pseudo, 50, 50));
       }
-      const pin = this.pins.get(id) as Pin;
-      pin.text = player.pseudo;
+      const pin: Pin = this.pins.get(id) as Pin;
+      await pin.setText(player.pseudo);
       pin.x = player.x;
       pin.y = player.y;
     }
@@ -46,8 +47,8 @@ export default class Map2D {
     ctx.drawImage(this.texture, 0, 0);
 
     this.pins.forEach((pin: Pin) => {
-      ctx.drawImage(pin._sprite, pin.x, pin.y, pin.width, pin.height);
-      ctx.fillText(pin.text, pin.x, pin.y);
+      ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
+      //ctx.fillText(pin.text, pin.x, pin.y);
     });
   }
 }

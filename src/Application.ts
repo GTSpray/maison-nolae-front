@@ -6,6 +6,7 @@ import UserInteraction from "./UserInteraction";
 import Animation from "./Animation";
 
 import Ajv from "ajv";
+import Banner from "./banner/Banner";
 const ajv = new Ajv();
 
 export interface ApplicationConfiguration {
@@ -124,12 +125,10 @@ export default class Application {
       }
     });
 
-    const pinSprite = await RessourcesLoader.loadImage(
-      this._config.pinSpriteUrl
-    );
+    const banner = await Banner.load();
 
-    this._ws.player.subscribe((player) => {
-      house.set(player, pinSprite);
+    this._ws.player.subscribe(async (player) => {
+      await house.set(player, banner);
     });
 
     const playerList: Player[] = (await RessourcesLoader.httpRequest({
@@ -138,9 +137,9 @@ export default class Application {
       responseType: "json"
     })) as Player[];
 
-    playerList.forEach((player) => {
-      house.set(player, pinSprite);
-    });
+    for (const player of playerList) {
+      await house.set(player, banner);
+    }
   }
 
   private async load() {
