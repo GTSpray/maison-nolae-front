@@ -1,5 +1,5 @@
 import style from "./banners.txt";
-import banner1 from "./banner1.svg";
+import bannersUrl from "./banners.svg";
 
 import RessourcesLoader, { HttpMethod } from "../RessourcesLoader";
 
@@ -7,6 +7,12 @@ function htmlToElement(html: string): HTMLElement {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html.trim(), "text/html");
   return doc.body.firstChild as HTMLElement;
+}
+
+function randomInt(min:number, max:number): number {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function applyStyle(element: HTMLElement, styles: string) {
@@ -27,10 +33,18 @@ export default class Banner {
   private _svg: HTMLElement;
   private _textContainer: HTMLElement;
 
-  constructor(svg: HTMLElement) {
+  constructor(banners: HTMLElement) {
+    const svg = banners.cloneNode(true) as HTMLElement;
+    const b = svg.querySelectorAll('.banner');
+      const m = randomInt(0, b.length);
+      b.forEach((e,i)=>{
+        if(i !== m){
+          const parent = e.parentNode as HTMLElement;
+          parent.removeChild(e);
+        }
+      });
     this._textContainer = svg.querySelector(".name") as HTMLElement;
     this._svg = svg;
-    applyStyle(svg, style);
   }
 
   set label(value: string) {
@@ -39,13 +53,15 @@ export default class Banner {
     this._textContainer.textContent = `${name.substring(0, max)}`;
   }
 
-  static async load(): Promise<Banner> {
+  static async load(): Promise<HTMLElement> {
     try {
       const img = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
-        url: `./${banner1}`
+        url: `./${bannersUrl}`
       });
-      return new Banner(htmlToElement(img));
+      const banners = htmlToElement(img);
+      applyStyle(banners, style);
+      return banners;
     } catch (error) {
       console.error(error);
       throw error;
@@ -58,8 +74,6 @@ export default class Banner {
     const url = window.URL.createObjectURL(blob);
     const img = await RessourcesLoader.loadImage(url);
     window.URL.revokeObjectURL(url);
-    img.width *= 0.5;
-    img.height *= 0.5;
     return img;
   }
 }

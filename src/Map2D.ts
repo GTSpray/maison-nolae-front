@@ -26,11 +26,11 @@ export default class Map2D {
     return this._texture;
   }
 
-  set(player: Player, banner: Banner) {
+  set(player: Player, banner: HTMLElement) {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
-        this.pins.set(id, new Pin(banner, player.pseudo, 150, 150));
+        this.pins.set(id, new Pin(banner, player.pseudo, 400, 240));
       }
       const pin: Pin = this.pins.get(id) as Pin;
       pin.text = player.pseudo;

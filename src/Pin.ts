@@ -9,8 +9,8 @@ export default class Pin {
   private _y: number;
   private _text: string;
 
-  constructor(sprite: Banner, text: string, w: number, h: number) {
-    this._banner = sprite;
+  constructor(banners: HTMLElement, text: string, w: number, h: number) {
+    this._banner = new Banner(banners);
     this._width = w;
     this._height = h;
     this._sprite = new Image();
