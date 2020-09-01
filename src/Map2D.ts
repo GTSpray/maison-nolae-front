@@ -30,7 +30,7 @@ export default class Map2D {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
-        this.pins.set(id, new Pin(banner, player.pseudo, 50, 50));
+        this.pins.set(id, new Pin(banner, player.pseudo, 150, 150));
       }
       const pin: Pin = this.pins.get(id) as Pin;
       pin.text = player.pseudo;
@@ -47,8 +47,7 @@ export default class Map2D {
     ctx.drawImage(this.texture, 0, 0);
 
     this.pins.forEach((pin: Pin) => {
-      ctx.drawImage(pin.sprite, pin.x, pin.y);
-      ctx.fillText(pin.text, pin.x, pin.y);
+      ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
     });
   }
 }

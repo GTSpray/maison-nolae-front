@@ -36,7 +36,9 @@ export default class Pin {
     if (this._text !== text) {
       this._text = text;
       this._banner.label = text;
-      this._banner.compile().then((img) => (this._sprite = img));
+      this._banner.compile().then((img) => {
+        this._sprite = img;
+      });
     }
   }
 
