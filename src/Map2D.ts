@@ -26,14 +26,14 @@ export default class Map2D {
     return this._texture;
   }
 
-  async set(player: Player, banner: Banner) {
+  set(player: Player, banner: Banner) {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
         this.pins.set(id, new Pin(banner, player.pseudo, 50, 50));
       }
       const pin: Pin = this.pins.get(id) as Pin;
-      await pin.setText(player.pseudo);
+      pin.text = player.pseudo;
       pin.x = player.x;
       pin.y = player.y;
     }
@@ -48,7 +48,7 @@ export default class Map2D {
 
     this.pins.forEach((pin: Pin) => {
       ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
-      //ctx.fillText(pin.text, pin.x, pin.y);
+      ctx.fillText(pin.text, pin.x, pin.y);
     });
   }
 }

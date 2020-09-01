@@ -9,7 +9,7 @@
     "start": "http-server ./dist -p ${PORT:-8080} --utc",
     "start:dev": "http-server ./dist -p ${PORT:-8080} --utc --ssl -c-1",
     "build:dev": "parcel serve index.html --public-url ./",
-    "dev": "parcel serve index.html --public-url ./",
+    "dev": "parcel index.html",
     "build": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js",
@@ -25,22 +25,11 @@
     "display": "fullscreen",
     "generateIconOptions": {
       "baseIcon": "./teapot.svg",
-      "sizes": [
-        36,
-        48,
-        72,
-        96,
-        144,
-        192,
-        384,
-        512
-      ],
+      "sizes": [36, 48, 72, 96, 144, 192, 384, 512],
       "genFavicons": true
     }
   },
-  "browserslist": [
-    "last 1 Chrome versions"
-  ],
+  "browserslist": ["last 1 Chrome versions"],
   "dependencies": {
     "@types/ajv-keywords": "3.4.0",
     "@types/node": "14.6.0",

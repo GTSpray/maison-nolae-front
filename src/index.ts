@@ -27,7 +27,6 @@ appContainer.innerHTML = `
   </div>
 `;
 
-
 const conf: ApplicationConfiguration = {
   mapUrl: process.env.mapurl as string,
   pinSpriteUrl: process.env.pinspriteurl as string,

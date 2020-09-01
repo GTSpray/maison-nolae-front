@@ -16,6 +16,7 @@ export default class Pin {
     this._x = 0;
     this._y = 0;
     this._text = text;
+    this._sprite = new Image();
   }
 
   get sprite() {
@@ -30,10 +31,10 @@ export default class Pin {
     return this._height;
   }
 
-  async setText(text: string) {
+  set text(text: string) {
     this._text = text;
     this._banner.label = text;
-    this._sprite = await this._banner.compile();
+    this._banner.compile().then((img) => (this._sprite = img));
   }
 
   get text() {

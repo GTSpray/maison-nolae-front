@@ -127,8 +127,8 @@ export default class Application {
 
     const banner = await Banner.load();
 
-    this._ws.player.subscribe(async (player) => {
-      await house.set(player, banner);
+    this._ws.player.subscribe((player) => {
+      house.set(player, banner);
     });
 
     const playerList: Player[] = (await RessourcesLoader.httpRequest({
@@ -138,7 +138,7 @@ export default class Application {
     })) as Player[];
 
     for (const player of playerList) {
-      await house.set(player, banner);
+      house.set(player, banner);
     }
   }
 
