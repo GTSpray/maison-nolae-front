@@ -9,11 +9,18 @@ export default class Pin {
   private _y: number;
   private _text: string;
 
-  constructor(banners: HTMLElement, text: string, w: number, h: number) {
+  constructor(banners: HTMLElement, text: string, w?: number, h?: number) {
     this._banner = new Banner(banners);
-    this._width = w;
-    this._height = h;
+
+    const { width, height } = banners.getBoundingClientRect();
+
+    this._width = w ? w : width;
+    this._height = h ? h : height;
     this._sprite = new Image();
+
+    this._x = 0;
+    this._y = 0;
+    this._text = '';
 
     this.x = 0;
     this.y = 0;
@@ -47,15 +54,15 @@ export default class Pin {
   }
 
   set x(x: number) {
-    this._x = x - this._width / 2;
+    this._x = Math.round(x - this._width / 2);
   }
 
   set y(y: number) {
-    this._y = y;
+    this._y = Math.round(y - this._height / 2);
   }
 
   get x(): number {
-    return this._x + this._width / 2;
+    return this._x;
   }
 
   get y() {
