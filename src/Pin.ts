@@ -13,10 +13,11 @@ export default class Pin {
     this._banner = sprite;
     this._width = w;
     this._height = h;
-    this._x = 0;
-    this._y = 0;
-    this._text = text;
     this._sprite = new Image();
+
+    this.x = 0;
+    this.y = 0;
+    this.text = text;
   }
 
   get sprite() {
@@ -32,9 +33,11 @@ export default class Pin {
   }
 
   set text(text: string) {
-    this._text = text;
-    this._banner.label = text;
-    this._banner.compile().then((img) => (this._sprite = img));
+    if (this._text !== text) {
+      this._text = text;
+      this._banner.label = text;
+      this._banner.compile().then((img) => (this._sprite = img));
+    }
   }
 
   get text() {

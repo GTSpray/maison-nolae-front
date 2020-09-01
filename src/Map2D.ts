@@ -47,7 +47,7 @@ export default class Map2D {
     ctx.drawImage(this.texture, 0, 0);
 
     this.pins.forEach((pin: Pin) => {
-      ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
+      ctx.drawImage(pin.sprite, pin.x, pin.y);
       ctx.fillText(pin.text, pin.x, pin.y);
     });
   }
