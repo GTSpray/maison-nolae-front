@@ -43,14 +43,13 @@ export default class Banner {
           parent.removeChild(e);
         }
       });
-    this._textContainer = svg.querySelector(".name") as HTMLElement;
+    this._textContainer = svg.querySelector("text > textPath") as HTMLElement;
     this._svg = svg;
   }
 
   set label(value: string) {
     const name = value.trim();
-    const max = parseInt(`${this._textContainer.getAttribute("data-max")}`, 10);
-    this._textContainer.textContent = `${name.substring(0, max)}`;
+    this._textContainer.textContent = `${name}`;
   }
 
   static async load(): Promise<HTMLElement> {
