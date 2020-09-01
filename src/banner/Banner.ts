@@ -4,24 +4,39 @@ import banner1 from "./banner1.svg";
 import RessourcesLoader, { HttpMethod } from "../RessourcesLoader";
 
 function htmlToElement(html: string): HTMLElement {
-  const template = document.createElement("template");
-  html = html.trim();
-  template.innerHTML = html;
-  return template.content.firstChild as HTMLElement;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html.trim(), "text/html");
+  return doc.body.firstChild as HTMLElement;
+}
+
+function applyStyle(element: HTMLElement, styles: string) {
+  let defs: SVGDefsElement | HTMLElement = element.querySelector(
+    "defs"
+  ) as SVGDefsElement;
+  if (!defs) {
+    defs = document.createElement("defs");
+    element.appendChild(defs);
+  }
+  const css: HTMLStyleElement = document.createElement("style");
+  css.type = "text/css";
+  css.appendChild(document.createTextNode(styles));
+  defs.appendChild(css);
 }
 
 export default class Banner {
-  private svg: HTMLElement;
+  private _svg: HTMLElement;
+  private _textContainer: HTMLElement;
 
   constructor(svg: HTMLElement) {
-    this.svg = svg;
-    this.applyStyle(style);
+    this._textContainer = svg.querySelector(".name") as HTMLElement;
+    this._svg = svg;
+    applyStyle(svg, style);
   }
 
   set label(value: string) {
     const name = value.trim();
-    const max = parseInt(`${this.svg.getAttribute("data-max")}`, 10);
-    this.svg.textContent = `${name.substring(0, max)}`;
+    const max = parseInt(`${this._textContainer.getAttribute("data-max")}`, 10);
+    this._textContainer.textContent = `${name.substring(0, max)}`;
   }
 
   static async load(): Promise<Banner> {
@@ -37,26 +52,14 @@ export default class Banner {
     }
   }
 
-  applyStyle(styles: string) {
-    let defs: SVGDefsElement | HTMLElement = this.svg.querySelector(
-      "defs"
-    ) as SVGDefsElement;
-    if (!defs) {
-      defs = document.createElement("defs");
-      this.svg.appendChild(defs);
-    }
-    const css: HTMLStyleElement = document.createElement("style");
-    css.type = "text/css";
-    css.appendChild(document.createTextNode(styles));
-    defs.appendChild(css);
-  }
-
-  async compile(): Promise<SVGImageElement> {
-    const data = new XMLSerializer().serializeToString(this.svg);
+  async compile(): Promise<HTMLImageElement> {
+    const data = new XMLSerializer().serializeToString(this._svg);
     const blob = new Blob([data], { type: "image/svg+xml" });
     const url = window.URL.createObjectURL(blob);
     const img = await RessourcesLoader.loadImage(url);
     window.URL.revokeObjectURL(url);
+    img.width *= 0.5;
+    img.height *= 0.5;
     return img;
   }
 }
