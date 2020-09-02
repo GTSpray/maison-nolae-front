@@ -1,16 +1,17 @@
-@import './reset';
-@import './teapot.scss';
-@import './button.scss';
-@import './input-text.scss';
+@import "./reset";
+@import "./teapot.scss";
+@import "./button.scss";
+@import "./input-text.scss";
 
-html, body { 
+html,
+body {
   position: absolute;
   top: 0;
-  left:0;
+  left: 0;
   right: 0;
   bottom: 0;
   overflow: auto;
-  
+
   .noevent {
     pointer-events: none;
   }
@@ -40,10 +41,8 @@ html, body {
       }
 
       .indicator {
-        margin: .5em 0;
+        margin: 0.5em 0;
       }
-
-      
     }
-  }    
+  }
 }

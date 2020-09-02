@@ -20,7 +20,7 @@ export default class Pin {
 
     this._x = 0;
     this._y = 0;
-    this._text = '';
+    this._text = "";
 
     this.x = 0;
     this.y = 0;

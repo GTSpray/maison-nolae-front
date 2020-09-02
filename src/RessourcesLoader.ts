@@ -11,7 +11,7 @@ export enum HttpMethod {
   PATCH = "PATCH",
   POST = "POST",
   PUT = "PUT",
-  TRACE = "TRACE"
+  TRACE = "TRACE",
 }
 
 export interface RequestOptions {
@@ -60,7 +60,7 @@ export default class RessourcesLoader {
           reject({
             opts,
             status: xhr.status,
-            statusText: xhr.statusText
+            statusText: xhr.statusText,
           });
         }
       });
@@ -69,7 +69,7 @@ export default class RessourcesLoader {
         reject({
           opts,
           status: xhr.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       });
 

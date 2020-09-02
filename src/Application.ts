@@ -38,7 +38,7 @@ export default class Application {
       id: null,
       pseudo: "",
       x: 0,
-      y: 0
+      y: 0,
     };
 
     this._config = config;
@@ -46,7 +46,7 @@ export default class Application {
     this._ws = new WS();
     this._ui = new UserInteraction({
       clickArea: this._config.canvas,
-      pseudo: this._config.pseudo
+      pseudo: this._config.pseudo,
     });
 
     if (this._debug) {
@@ -76,13 +76,13 @@ export default class Application {
     this._ui.click.subscribe((position) => {
       const newMe = {
         ...this._me,
-        ...position
+        ...position,
       };
       if (ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me
+          payload: this._me,
         });
       }
     });
@@ -90,13 +90,13 @@ export default class Application {
     this._ui.pseudo.subscribe((pseudo) => {
       const newMe = {
         ...this._me,
-        pseudo
+        pseudo,
       };
       if (ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me
+          payload: this._me,
         });
       }
     });
@@ -134,7 +134,7 @@ export default class Application {
     const playerList: Player[] = (await RessourcesLoader.httpRequest({
       method: HttpMethod.GET,
       url: `${this._config.backendendpoint}/players`,
-      responseType: "json"
+      responseType: "json",
     })) as Player[];
 
     for (const player of playerList) {
@@ -147,7 +147,7 @@ export default class Application {
       this._apiContracts = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
         url: `${this._config.backendendpoint}/contracts`,
-        responseType: "json"
+        responseType: "json",
       });
     } catch (error) {
       throw new Error("Unable to load api contracts");
@@ -163,8 +163,8 @@ export default class Application {
           url: `${this._config.backendendpoint}/auth`,
           responseType: "json",
           params: {
-            code: discordAuthCode
-          }
+            code: discordAuthCode,
+          },
         });
         this._me.id = auth.player.id;
         this._me.pseudo = auth.player.pseudo;

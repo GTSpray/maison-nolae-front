@@ -9,7 +9,7 @@ function htmlToElement(html: string): HTMLElement {
   return doc.body.firstChild as HTMLElement;
 }
 
-function randomInt(min:number, max:number): number {
+function randomInt(min: number, max: number): number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -35,14 +35,14 @@ export default class Banner {
 
   constructor(banners: HTMLElement) {
     const svg = banners.cloneNode(true) as HTMLElement;
-    const b = svg.querySelectorAll('.banner');
-      const m = randomInt(0, b.length);
-      b.forEach((e,i)=>{
-        if(i !== m){
-          const parent = e.parentNode as HTMLElement;
-          parent.removeChild(e);
-        }
-      });
+    const b = svg.querySelectorAll(".banner");
+    const m = randomInt(0, b.length);
+    b.forEach((e, i) => {
+      if (i !== m) {
+        const parent = e.parentNode as HTMLElement;
+        parent.removeChild(e);
+      }
+    });
     this._textContainer = svg.querySelector("text > textPath") as HTMLElement;
     this._svg = svg;
   }
@@ -56,7 +56,7 @@ export default class Banner {
     try {
       const img = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
-        url: `./${bannersUrl}`
+        url: `./${bannersUrl}`,
       });
       const banners = htmlToElement(img);
       applyStyle(banners, style);

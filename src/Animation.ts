@@ -38,7 +38,7 @@ export default class Animation {
       this.event.next({
         time: time,
         frame,
-        cycle
+        cycle,
       });
     }
 

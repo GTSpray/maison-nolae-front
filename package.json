@@ -13,7 +13,8 @@
     "build": "parcel build index.html --public-url ./ --no-source-maps",
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js",
-    "clean:build": "rm -rf .cache dist"
+    "clean:build": "rm -rf .cache dist",
+    "prettier": "prettier --write ."
   },
   "pwaManifest": {
     "name": "Maison de Nolae",
@@ -46,6 +47,7 @@
     "@types/node": "14.6.0",
     "ajv": "6.12.3",
     "http-server": "0.12.3",
+    "jest-cli": "^26.4.2",
     "npm-run-all": "^4.1.5",
     "parcel-plugin-text": "0.9.5",
     "rxjs": "6.6.2",
@@ -54,12 +56,13 @@
   },
   "engines": {
     "node": ">=10.10.0",
-    "npm": "6.14.5",
-    "yarn": "1.22.4"
+    "npm": ">=6.14.5",
+    "yarn": ">=1.22.4"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-pwa-manifest": "^3.0.10"
+    "parcel-plugin-pwa-manifest": "^3.0.10",
+    "prettier": "^2.1.1"
   },
   "keywords": []
 }

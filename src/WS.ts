@@ -48,8 +48,8 @@ export default class WS {
           this.send({
             type: "authentication",
             payload: {
-              token: this._token
-            }
+              token: this._token,
+            },
           });
           break;
         case "close":

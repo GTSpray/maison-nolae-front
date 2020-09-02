@@ -30,7 +30,7 @@ export default class UserInteraction {
     const rect = this._config.clickArea.getBoundingClientRect();
     this.click.next({
       y: mouse.y - rect.top,
-      x: mouse.x - rect.left
+      x: mouse.x - rect.left,
     });
     this.event.next(new Event("click"));
   }

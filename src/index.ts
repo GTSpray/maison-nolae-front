@@ -35,7 +35,7 @@ const conf: ApplicationConfiguration = {
   canvas: document.getElementById("kanvas") as HTMLCanvasElement,
   pseudo: document.getElementById("pseudo") as HTMLInputElement,
   nope: document.getElementById("nope") as HTMLInputElement,
-  uiactive: document.getElementById("uiactive") as HTMLInputElement
+  uiactive: document.getElementById("uiactive") as HTMLInputElement,
 };
 
 const app = new Application(conf);
