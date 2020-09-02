@@ -1,13 +1,13 @@
-import IPlayer from "./Player";
+import IPlayer from "./IPlayer";
 import Map2D from "./Map2D";
 import WS from "./WS";
 import RessourcesLoader, { HttpMethod } from "./RessourcesLoader";
 import UserInteraction from "./UserInteraction";
 import Animation from "./Animation";
 
-import Ajv from "ajv";
+import ajv from "ajv";
 import Banner from "./banner/Banner";
-const ajv = new Ajv();
+const Ajv = new ajv();
 
 export interface ApplicationConfiguration {
   mapUrl: string;
@@ -81,7 +81,7 @@ export default class Application {
         ...this._me,
         ...position,
       };
-      if (ajv.validate(this._apiContracts["player"], newMe)) {
+      if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
@@ -95,7 +95,7 @@ export default class Application {
         ...this._me,
         pseudo,
       };
-      if (ajv.validate(this._apiContracts["player"], newMe)) {
+      if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
@@ -107,7 +107,7 @@ export default class Application {
     this._ui.event.subscribe((e) => {
       switch (e.type) {
         case "pseudo":
-          this._config.nope.checked = ajv.validate(
+          this._config.nope.checked = Ajv.validate(
             this._apiContracts["player"]["properties"]["pseudo"],
             this._config.pseudo.value
           ) as boolean;

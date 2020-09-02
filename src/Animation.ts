@@ -37,7 +37,7 @@ export default class Animation {
       const frame = this._frame - cycle * this._fps;
 
       this.event.next({
-        time: time,
+        time,
         frame,
         cycle,
       });

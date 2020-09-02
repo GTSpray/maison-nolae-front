@@ -1,5 +1,5 @@
-import style from "./banners.txt";
-import bannersUrl from "./banners.svg";
+import bannersTxt from "./banners.txt";
+import bannersSvg from "./banners.svg";
 
 import RessourcesLoader, { HttpMethod } from "../RessourcesLoader";
 
@@ -10,9 +10,9 @@ function htmlToElement(html: string): HTMLElement {
 }
 
 function randomInt(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+  const minCeil = Math.ceil(min);
+  const maxFloor = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloor - minCeil)) + minCeil;
 }
 
 function applyStyle(element: HTMLElement, styles: string) {
@@ -56,10 +56,10 @@ export default class Banner {
     try {
       const img = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
-        url: `./${bannersUrl}`,
+        url: `./${bannersSvg}`,
       });
       const banners = htmlToElement(img);
-      applyStyle(banners, style);
+      applyStyle(banners, bannersTxt);
       return banners;
     } catch (error) {
       console.error(error);

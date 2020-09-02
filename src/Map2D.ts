@@ -1,6 +1,6 @@
 import RessourcesLoader from "./RessourcesLoader";
 import Pin from "./Pin";
-import IPlayer from "./Player";
+import IPlayer from "./IPlayer";
 export default class Map2D {
   static async load(url: string): Promise<Map2D> {
     try {

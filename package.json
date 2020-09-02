@@ -14,7 +14,11 @@
     "cert": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem",
     "preset:env": "node set_env.js",
     "clean:build": "rm -rf .cache dist",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "lint": "tslint --format stylish --project tsconfig.json",
+    "lint:fix": "tslint --fix --format stylish --project tsconfig.json",
+    "test": "jest --no-cache --ci --verbose --colors --maxWorkers=5",
+    "test:watch": "jest --watchAll --ci --colors --maxWorkers=5"
   },
   "pwaManifest": {
     "name": "Maison de Nolae",
@@ -42,17 +46,29 @@
   "browserslist": [
     "last 1 Chrome versions"
   ],
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)x?$",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx,js,jsx}",
+      "!src/**/*.d.ts"
+    ]
+  },
   "dependencies": {
-    "@types/ajv-keywords": "3.4.0",
-    "@types/node": "14.6.0",
-    "ajv": "6.12.3",
     "http-server": "0.12.3",
-    "jest-cli": "^26.4.2",
-    "npm-run-all": "^4.1.5",
-    "parcel-plugin-text": "0.9.5",
-    "rxjs": "6.6.2",
-    "sass": "1.26.10",
-    "typescript": "3.9.7"
+    "npm-run-all": "^4.1.5"
   },
   "engines": {
     "node": ">=10.10.0",
@@ -60,9 +76,24 @@
     "yarn": ">=1.22.4"
   },
   "devDependencies": {
+    "@types/ajv-keywords": "3.4.0",
+    "@types/jest": "^23.3.8",
+    "@types/node": "14.6.0",
+    "ajv": "6.12.3",
+    "jest": "^23.6.0",
+    "jest-cli": "^26.4.2",
+    "lint-staged": "^8.0.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-pwa-manifest": "^3.0.10",
-    "prettier": "^2.1.1"
+    "parcel-plugin-text": "0.9.5",
+    "prettier": "^2.1.1",
+    "rxjs": "6.6.2",
+    "sass": "1.26.10",
+    "ts-jest": "^23.10.4",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "3.9.7"
   },
   "keywords": []
 }

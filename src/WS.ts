@@ -1,8 +1,8 @@
-import IPlayer from "./Player";
+import IPlayer from "./IPlayer";
 import { Observable, Subject } from "rxjs";
 
-import Ajv from "ajv";
-const ajv = new Ajv();
+import ajv from "ajv";
+const Ajv = new ajv();
 
 export default class WS {
   private _ws: WebSocket | null;
@@ -57,7 +57,7 @@ export default class WS {
         case "close":
           if (this._tries < 3) {
             this.connect(this._endpoint, this._token);
-            this._tries++;
+            this._tries+=1;
           }
           break;
       }
@@ -77,7 +77,7 @@ export default class WS {
   }
   connect(endpoint: string, token: string) {
     if (this._endpoint === endpoint) {
-      this._tries++;
+      this._tries+=1;
     } else {
       this._endpoint = endpoint;
     }
@@ -108,7 +108,7 @@ export default class WS {
   send(data: Object) {
     if (this._ws) {
       try {
-        if (ajv.validate(this._contract, data)) {
+        if (Ajv.validate(this._contract, data)) {
           const event = JSON.stringify(data);
           this._ws.send(event);
           this._webSocketSub.next(new Event("sent"));

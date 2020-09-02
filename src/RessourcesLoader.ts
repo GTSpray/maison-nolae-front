@@ -1,5 +1,3 @@
-import Ping from "ping.js";
-
 declare var ActiveXObject: (type: string) => void;
 
 export enum HttpMethod {
@@ -25,7 +23,7 @@ export interface RequestOptions {
 
 export default class RessourcesLoader {
   static getXMLHttpRequest(): XMLHttpRequest | null {
-    var xhr = null;
+    let xhr = null;
     if (window.XMLHttpRequest || window.ActiveXObject) {
       if (window.ActiveXObject) {
         try {
@@ -77,10 +75,7 @@ export default class RessourcesLoader {
       if (opts.params) {
         params = Object.keys(opts.params)
           .map(
-            (key) =>
-              encodeURIComponent(key) +
-              "=" +
-              encodeURIComponent(opts.params[key])
+            (key) =>`${encodeURIComponent(key)}=${encodeURIComponent(opts.params[key])}`
           )
           .join("&");
       }
