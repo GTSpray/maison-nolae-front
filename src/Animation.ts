@@ -21,6 +21,7 @@ export default class Animation {
     this.event = new Subject();
     this._tref = this._time = this._frame = this._delay = -1;
 
+    this._fps = 0;
     this.fps = fps;
   }
 

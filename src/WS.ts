@@ -1,4 +1,4 @@
-import Player from "./Player";
+import IPlayer from "./Player";
 import { Observable, Subject } from "rxjs";
 
 import Ajv from "ajv";
@@ -9,8 +9,8 @@ export default class WS {
   private _websocket: Observable<Event>;
   private _webSocketSub: Subject<Event>;
 
-  private _player: Observable<Player>;
-  private _playerSub: Subject<Player>;
+  private _player: Observable<IPlayer>;
+  private _playerSub: Subject<IPlayer>;
 
   private _contract: any;
   private _token: string;
@@ -25,7 +25,9 @@ export default class WS {
     this._ws = null;
     this._tries = 0;
 
-    const subPlayer: Subject<Player> = new Subject();
+    this._token = "";
+    this._endpoint= "";
+    const subPlayer: Subject<IPlayer> = new Subject();
     this._player = new Observable((sub) => {
       subPlayer.subscribe((player) => {
         sub.next(player);
@@ -85,7 +87,7 @@ export default class WS {
     const wsSub = this._webSocketSub;
     this._ws.onmessage = (evt) => {
       try {
-        const player: Player = JSON.parse(evt.data);
+        const player: IPlayer = JSON.parse(evt.data);
         this._playerSub.next(player);
       } catch (error) {}
       wsSub.next(evt);

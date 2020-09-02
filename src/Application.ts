@@ -1,4 +1,4 @@
-import Player from "./Player";
+import IPlayer from "./Player";
 import Map2D from "./Map2D";
 import WS from "./WS";
 import RessourcesLoader, { HttpMethod } from "./RessourcesLoader";
@@ -23,7 +23,7 @@ export interface ApplicationConfiguration {
 export default class Application {
   private _debug: boolean = false;
 
-  private _me: Player;
+  private _me: IPlayer;
   private _house: Map2D | null;
   private _ws: WS;
   private _ui: UserInteraction;
@@ -40,6 +40,9 @@ export default class Application {
       x: 0,
       y: 0,
     };
+    
+    this._house = null;
+    this._token= "";
 
     this._config = config;
 
@@ -131,11 +134,11 @@ export default class Application {
       house.set(player, banner);
     });
 
-    const playerList: Player[] = (await RessourcesLoader.httpRequest({
+    const playerList: IPlayer[] = (await RessourcesLoader.httpRequest({
       method: HttpMethod.GET,
       url: `${this._config.backendendpoint}/players`,
       responseType: "json",
-    })) as Player[];
+    })) as IPlayer[];
 
     for (const player of playerList) {
       house.set(player, banner);

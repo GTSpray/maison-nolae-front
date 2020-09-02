@@ -1,8 +1,6 @@
 import RessourcesLoader from "./RessourcesLoader";
 import Pin from "./Pin";
-import Player from "./Player";
-import Banner from "./banner/Banner";
-
+import IPlayer from "./Player";
 export default class Map2D {
   static async load(url: string): Promise<Map2D> {
     try {
@@ -26,7 +24,7 @@ export default class Map2D {
     return this._texture;
   }
 
-  set(player: Player, banner: HTMLElement) {
+  set(player: IPlayer, banner: HTMLElement) {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
