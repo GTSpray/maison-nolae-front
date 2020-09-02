@@ -1,5 +1,5 @@
 import RessourcesLoader from "./RessourcesLoader";
-import Pin from "./Pin";
+import Pin2D from "./Pin2D";
 import IPlayer from "./IPlayer";
 export default class Map2D {
   static async load(url: string): Promise<Map2D> {
@@ -12,7 +12,7 @@ export default class Map2D {
     }
   }
 
-  public pins: Map<string, Pin>;
+  public pins: Map<string, Pin2D>;
   private _texture: HTMLImageElement;
 
   constructor(texture: HTMLImageElement) {
@@ -24,27 +24,27 @@ export default class Map2D {
     return this._texture;
   }
 
-  set(player: IPlayer, banner: HTMLElement) {
+  set(player: IPlayer, banner: HTMLElement): void {
     const id = player.id as string;
     if (player.x && player.y) {
       if (!this.pins.has(id)) {
-        this.pins.set(id, new Pin(banner, player.pseudo, 400, 240));
+        this.pins.set(id, new Pin2D(banner, player.pseudo, 400, 240));
       }
-      const pin: Pin = this.pins.get(id) as Pin;
+      const pin: Pin2D = this.pins.get(id) as Pin2D;
       pin.text = player.pseudo;
       pin.x = player.x;
       pin.y = player.y;
     }
   }
 
-  refresh(ctx: CanvasRenderingContext2D) {
+  refresh(ctx: CanvasRenderingContext2D): void {
     ctx.font = "15px Georgia";
     ctx.textAlign = "center";
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, this.texture.width, this.texture.height);
     ctx.drawImage(this.texture, 0, 0);
 
-    this.pins.forEach((pin: Pin) => {
+    this.pins.forEach((pin: Pin2D) => {
       ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
     });
   }

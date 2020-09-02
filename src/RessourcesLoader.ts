@@ -1,4 +1,4 @@
-declare var ActiveXObject: (type: string) => void;
+declare let ActiveXObject: (type: string) => void;
 
 export enum HttpMethod {
   CONNECT = "CONNECT",
@@ -15,7 +15,7 @@ export enum HttpMethod {
 export interface RequestOptions {
   headers?: { [key: string]: string };
   timeout?: number;
-  params?: Object;
+  params?:  { [key: string]: string };
   responseType?: XMLHttpRequestResponseType;
   method: HttpMethod;
   url: string;
@@ -44,7 +44,7 @@ export default class RessourcesLoader {
     return xhr;
   }
 
-  static httpRequest(opts: RequestOptions): Promise<any> {
+  static httpRequest(opts: RequestOptions): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const xhr = RessourcesLoader.getXMLHttpRequest() as XMLHttpRequest;
 
@@ -71,22 +71,22 @@ export default class RessourcesLoader {
         });
       });
 
-      let params = "";
-      if (opts.params) {
-        params = Object.keys(opts.params)
-          .map(
-            (key) =>`${encodeURIComponent(key)}=${encodeURIComponent(opts.params[key])}`
-          )
-          .join("&");
+      const parameters = opts.params || {};
+      const params: string[] = [];
+      for (const key in parameters) {
+        if (Object.prototype.hasOwnProperty.call(parameters, key)) {
+          params.push(`${encodeURIComponent(key)}=${encodeURIComponent(parameters[key])}`);
+        }
       }
 
       switch (opts.method) {
         case HttpMethod.GET: {
-          xhr.open(opts.method, `${opts.url}?${params}`);
-          if (opts.headers) {
-            Object.keys(opts.headers).forEach((key) =>
-              xhr.setRequestHeader(key, opts.headers[key])
-            );
+          xhr.open(opts.method, `${opts.url}?${params.join('&')}`);
+          const headers = opts.headers || {};
+          for (const key in headers) {
+            if (Object.prototype.hasOwnProperty.call(headers, key)) {
+              xhr.setRequestHeader(key, headers[key])
+            }
           }
           xhr.send();
           break;
@@ -97,10 +97,11 @@ export default class RessourcesLoader {
             "Content-Type",
             "application/json;charset=UTF-8"
           );
-          if (opts.headers) {
-            Object.keys(opts.headers).forEach((key) =>
-              xhr.setRequestHeader(key, opts.headers[key])
-            );
+          const headers = opts.headers || {};
+          for (const key in headers) {
+            if (Object.prototype.hasOwnProperty.call(headers, key)) {
+              xhr.setRequestHeader(key, headers[key])
+            }
           }
           xhr.send(JSON.stringify(opts.params));
           break;

@@ -12,7 +12,7 @@ export default class WS {
   private _player: Observable<IPlayer>;
   private _playerSub: Subject<IPlayer>;
 
-  private _contract: any;
+  private _contract: unknown;
   private _token: string;
 
   private _endpoint: string;
@@ -26,7 +26,7 @@ export default class WS {
     this._tries = 0;
 
     this._token = "";
-    this._endpoint= "";
+    this._endpoint = "";
     const subPlayer: Subject<IPlayer> = new Subject();
     this._player = new Observable((sub) => {
       subPlayer.subscribe((player) => {
@@ -57,27 +57,27 @@ export default class WS {
         case "close":
           if (this._tries < 3) {
             this.connect(this._endpoint, this._token);
-            this._tries+=1;
+            this._tries += 1;
           }
           break;
       }
     });
   }
 
-  get event() {
+  get event(): Observable<Event> {
     return this._websocket;
   }
 
-  get player() {
+  get player(): Observable<IPlayer> {
     return this._player;
   }
 
-  set contract(contract: any) {
+  set contract(contract: unknown) {
     this._contract = contract;
   }
-  connect(endpoint: string, token: string) {
+  connect(endpoint: string, token: string): void {
     if (this._endpoint === endpoint) {
-      this._tries+=1;
+      this._tries += 1;
     } else {
       this._endpoint = endpoint;
     }
@@ -89,7 +89,9 @@ export default class WS {
       try {
         const player: IPlayer = JSON.parse(evt.data);
         this._playerSub.next(player);
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
       wsSub.next(evt);
     };
     this._ws.onerror = this._ws.onopen = this._ws.onclose = (evt: Event) => {
@@ -97,7 +99,7 @@ export default class WS {
     };
   }
 
-  disconnect() {
+  disconnect(): void {
     if (this._ws) {
       this._ws.close();
       this._ws = null;
@@ -105,10 +107,11 @@ export default class WS {
     this._webSocketSub.next(new Event("disconnected"));
   }
 
-  send(data: Object) {
+  send(data: unknown): void {
     if (this._ws) {
       try {
-        if (Ajv.validate(this._contract, data)) {
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        if (Ajv.validate(this._contract as object, data)) {
           const event = JSON.stringify(data);
           this._ws.send(event);
           this._webSocketSub.next(new Event("sent"));

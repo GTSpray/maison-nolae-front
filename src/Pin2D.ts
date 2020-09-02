@@ -1,6 +1,6 @@
 import Banner from "./banner/Banner";
 
-export default class Pin {
+export default class Pin2D {
   private _banner: Banner;
   private _sprite: HTMLImageElement;
   private _width: number;
@@ -27,15 +27,15 @@ export default class Pin {
     this.text = text;
   }
 
-  get sprite() {
+  get sprite(): HTMLImageElement{
     return this._sprite;
   }
 
-  get width() {
+  get width(): number{
     return this._width;
   }
 
-  get height() {
+  get height(): number {
     return this._height;
   }
 
@@ -49,7 +49,7 @@ export default class Pin {
     }
   }
 
-  get text() {
+  get text(): string {
     return this._text;
   }
 
@@ -61,11 +61,13 @@ export default class Pin {
     this._y = Math.round(y - this._height / 2);
   }
 
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   get x(): number {
     return this._x;
   }
 
-  get y() {
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+  get y(): number {
     return this._y;
   }
 }

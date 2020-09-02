@@ -25,7 +25,7 @@ export default class Animation {
     this.fps = fps;
   }
 
-  loop(time: number) {
+  loop(time: number): void {
     if (this._time === null) {
       this._time = time;
     }
@@ -52,14 +52,14 @@ export default class Animation {
     this._frame = this._time = -1;
   }
 
-  start() {
+  start(): void {
     if (!this._isPlaying) {
       this._isPlaying = true;
       this._tref = requestAnimationFrame((t) => this.loop(t));
     }
   }
 
-  pause() {
+  pause(): void {
     if (this._isPlaying) {
       cancelAnimationFrame(this._tref);
       this._isPlaying = false;

@@ -35,7 +35,7 @@ export default class UserInteraction {
     this.event.next(new Event("click"));
   }
 
-  enable() {
+  enable(): void {
     this._config.clickArea.addEventListener(
       "mousedown",
       (e) => this.onClick(e),
@@ -44,7 +44,7 @@ export default class UserInteraction {
     this._config.pseudo.addEventListener("input", () => this.onPseudoChange());
   }
 
-  desable() {
+  desable(): void {
     this._config.clickArea.removeEventListener("mousedown", (e) =>
       this.onClick(e)
     );

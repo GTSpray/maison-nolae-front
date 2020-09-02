@@ -21,7 +21,7 @@ export interface ApplicationConfiguration {
 }
 
 export default class Application {
-  private _debug: boolean = false;
+  private _debug = false;
 
   private _me: IPlayer;
   private _house: Map2D | null;
@@ -30,7 +30,7 @@ export default class Application {
 
   private _config: ApplicationConfiguration;
 
-  private _apiContracts: any;
+  private _apiContracts: unknown;
   private _token: string;
 
   constructor(config: ApplicationConfiguration) {
@@ -58,7 +58,7 @@ export default class Application {
     }
   }
 
-  async start() {
+  async start(): Promise<boolean> {
     await this.load();
 
     const house = (this._house = await Map2D.load(this._config.mapUrl));
@@ -143,6 +143,8 @@ export default class Application {
     for (const player of playerList) {
       house.set(player, banner);
     }
+
+    return true;
   }
 
   private async load() {
@@ -168,7 +170,10 @@ export default class Application {
           params: {
             code: discordAuthCode,
           },
-        });
+        }) as {
+          player: IPlayer,
+          token: string
+        }
         this._me.id = auth.player.id;
         this._me.pseudo = auth.player.pseudo;
         this._config.pseudo.value = auth.player.pseudo;

@@ -15,8 +15,8 @@
     "preset:env": "node set_env.js",
     "clean:build": "rm -rf .cache dist",
     "prettier": "prettier --write .",
-    "lint": "tslint --format stylish --project tsconfig.json",
-    "lint:fix": "tslint --fix --format stylish --project tsconfig.json",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
     "test": "jest --no-cache --ci --verbose --colors --maxWorkers=5",
     "test:watch": "jest --watchAll --ci --colors --maxWorkers=5"
   },
@@ -79,10 +79,17 @@
     "@types/ajv-keywords": "3.4.0",
     "@types/jest": "^23.3.8",
     "@types/node": "14.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
     "ajv": "6.12.3",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-import": "2.22.0",
     "jest": "^23.6.0",
     "jest-cli": "^26.4.2",
-    "lint-staged": "^8.0.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-pwa-manifest": "^3.0.10",
     "parcel-plugin-text": "0.9.5",
@@ -90,10 +97,7 @@
     "rxjs": "6.6.2",
     "sass": "1.26.10",
     "ts-jest": "^23.10.4",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "typescript": "3.9.7"
+    "typescript": "^4.0.2"
   },
   "keywords": []
 }

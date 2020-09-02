@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require("fs");
 const envSample = fs.readFileSync(".env.sample", { encoding: "utf8" });
 const newLines = [];
