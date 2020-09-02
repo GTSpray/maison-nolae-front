@@ -17,8 +17,8 @@
     "prettier": "prettier --write .",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix",
-    "test": "jest --no-cache --ci --verbose --colors --maxWorkers=5",
-    "test:watch": "jest --watchAll --ci --colors --maxWorkers=5"
+    "test": "jest --no-cache --ci --verbose --colors --maxWorkers=4",
+    "test:watch": "jest --watchAll --ci --colors --maxWorkers=4"
   },
   "pwaManifest": {
     "name": "Maison de Nolae",
@@ -47,7 +47,12 @@
     "last 1 Chrome versions"
   ],
   "jest": {
-    "testEnvironment": "jsdom",
+      "testEnvironment": "jsdom",
+      "globals": {
+        "ts-jest": {
+            "isolatedModules": true
+        }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
