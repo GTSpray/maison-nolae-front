@@ -47,14 +47,21 @@
     "last 1 Chrome versions"
   ],
   "jest": {
-      "testEnvironment": "jsdom",
-      "globals": {
-        "ts-jest": {
-            "isolatedModules": true
-        }
+    "testEnvironment": "jsdom",
+    "setupFiles": [
+      "<rootDir>/tests/helpers/jest.setup.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    },
+    "moduleNameMapper": {
+      "^.+\\.(svg|txt)$": "<rootDir>/tests/helpers/stubProxy.ts"
     },
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.(svg|txt)$": "<rootDir>/tests/helpers/fileTransformer.js"
     },
     "moduleFileExtensions": [
       "ts",
@@ -92,6 +99,7 @@
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-jest": "^23.20.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-cli": "^26.4.2",
     "parcel-bundler": "^1.12.4",
@@ -101,6 +109,7 @@
     "rxjs": "6.6.2",
     "sass": "1.26.10",
     "ts-jest": "^23.10.4",
+    "ts-jest-transformer": "^1.0.0",
     "typescript": ">=2.7.0 <4.0.0"
   },
   "keywords": []

@@ -38,12 +38,8 @@ export default class Map2D {
   }
 
   refresh(ctx: CanvasRenderingContext2D): void {
-    ctx.font = "15px Georgia";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, this.texture.width, this.texture.height);
     ctx.drawImage(this.texture, 0, 0);
-
     this.pins.forEach((pin: Pin2D) => {
       ctx.drawImage(pin.sprite, pin.x, pin.y, pin.width, pin.height);
     });
