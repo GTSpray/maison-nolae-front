@@ -12,11 +12,14 @@ export default class Pin2D {
   constructor(banners: HTMLElement, text: string, w?: number, h?: number) {
     this._banner = new Banner(banners);
 
-    const { width, height } = banners.getBoundingClientRect();
+    const { width: bw, height: bh } = banners.getBoundingClientRect();
 
-    this._width = w ? w : width;
-    this._height = h ? h : height;
-    this._sprite = new Image();
+    const width = w ? w : bw;
+    const height = h ? h : bh;
+
+    this._width = width;
+    this._height = height;
+    this._sprite = new Image(width, height);
 
     this._x = 0;
     this._y = 0;
@@ -27,11 +30,11 @@ export default class Pin2D {
     this.text = text;
   }
 
-  get sprite(): HTMLImageElement{
+  get sprite(): HTMLImageElement {
     return this._sprite;
   }
 
-  get width(): number{
+  get width(): number {
     return this._width;
   }
 

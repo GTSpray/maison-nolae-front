@@ -26,7 +26,7 @@ export default class Map2D {
 
   set(player: IPlayer, banner: HTMLElement): void {
     const id = player.id as string;
-    if (player.x && player.y) {
+    if (player.x !== undefined && player.y !== undefined) {
       if (!this.pins.has(id)) {
         this.pins.set(id, new Pin2D(banner, player.pseudo, 400, 240));
       }
