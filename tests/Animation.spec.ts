@@ -51,40 +51,113 @@ describe("Animation", () => {
       expect(spy).toBeCalledTimes(1);
     });
 
-    describe("when animation fps are set to 4", () => {
+    describe('when anomation fps ar set to 4', () => {
       let aSpy: jest.Mock;
-      beforeAll(() => {
-        fakeRequestAnimationFrame.mockClear();
-        aSpy = jest.fn();
-        const aAnimation = new Animation(4);
-        aAnimation.event.subscribe(aSpy);
-        for (let i = 0; i < 999; i++) {
-          aAnimation.loop(i);
-        }
+      describe("requestAnimationFrame call it each ms", () => {
+        
+        beforeAll(() => {
+          fakeRequestAnimationFrame.mockClear();
+          aSpy = jest.fn();
+          const aAnimation = new Animation(4);
+          aAnimation.event.subscribe(aSpy);
+          for (let i = 0; i < 999; i++) {
+            aAnimation.loop(i);
+          }
+        });
+  
+        it("should emit 4 times", () => {
+          expect(aSpy).toHaveBeenCalledTimes(4);
+        });
+  
+        it.each([
+          [0, 0],
+          [249, 1],
+          [499, 2],
+          [749, 3],
+        ])("should emit at %dms for frame n°%d", (ms, frame) => {
+          const nbCall = frame+1;
+          const expected: AnimationTilt = {
+            cycle: 0,
+            frame,
+            time: ms,
+          };
+          expect(aSpy).toHaveBeenNthCalledWith(nbCall, expected);
+        });
+  
+        it("should call requestAnimationFrame 999 times (after each call)", () => {
+          expect(window.requestAnimationFrame).toHaveBeenCalledTimes(999);
+        });
+      });
+  
+      describe("and requestAnimationFrame call it between pause (browsers when running in background tabs or hidden)", () => {
+        beforeAll(() => {
+          fakeRequestAnimationFrame.mockClear();
+          aSpy = jest.fn();
+          const aAnimation = new Animation(4);
+          aAnimation.event.subscribe(aSpy);
+          for (let i = 0; i < 999; i+=100) {
+            aAnimation.loop(i);
+          }
+        });
+  
+        it("should emit 4 times", () => {
+          expect(aSpy).toHaveBeenCalledTimes(4);
+        });
+  
+        it.each([
+          [0, 0],
+          [300, 1],
+          [500, 2],
+          [800, 3],
+        ])("should emit at %dms for frame n°%d", (ms, frame) => {
+          const nbCall = frame+1;
+          const expected: AnimationTilt = {
+            cycle: 0,
+            frame,
+            time: ms,
+          };
+          expect(aSpy).toHaveBeenNthCalledWith(nbCall, expected);
+        });
+  
+        it("should call requestAnimationFrame 999 times (after each call)", () => {
+          expect(window.requestAnimationFrame).toHaveBeenCalledTimes(10);
+        });
       });
 
-      it("should emit 4 times", () => {
-        expect(aSpy).toHaveBeenCalledTimes(4);
+      describe("and requestAnimationFrame call it after long pause (browsers when running in background tabs or hidden)", () => {
+        beforeAll(() => {
+          fakeRequestAnimationFrame.mockClear();
+          aSpy = jest.fn();
+          const aAnimation = new Animation(4);
+          aAnimation.event.subscribe(aSpy);
+          aAnimation.loop(0);
+          aAnimation.loop(800);
+        });
+  
+        it("should emit 4 times", () => {
+          expect(aSpy).toHaveBeenCalledTimes(2);
+        });
+  
+        it.each([
+          [0, 0, 1],
+          [800, 3, 2],
+        ])("should emit at %dms for frame n°%d", (ms, frame, nbCall) => {
+          const expected: AnimationTilt = {
+            cycle: 0,
+            frame,
+            time: ms,
+          };
+          expect(aSpy).toHaveBeenNthCalledWith(nbCall, expected);
+        });
+  
+        it("should call requestAnimationFrame 999 times (after each call)", () => {
+          expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
+        });
       });
 
-      it.each([
-        [0, 0],
-        [249, 1],
-        [499, 2],
-        [749, 3],
-      ])("should emit at %dms for frame n°%d", (ms, frame) => {
-        const expected: AnimationTilt = {
-          cycle: 0,
-          frame,
-          time: ms,
-        };
-        expect(aSpy).toHaveBeenNthCalledWith(frame + 1, expected);
-      });
-
-      it("should call requestAnimationFrame 999 times (after each call)", () => {
-        expect(window.requestAnimationFrame).toHaveBeenCalledTimes(999);
-      });
     });
+
+    
   });
 
   describe("start", () => {
