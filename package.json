@@ -30,30 +30,18 @@
     "display": "fullscreen",
     "generateIconOptions": {
       "baseIcon": "./teapot.svg",
-      "sizes": [
-        36,
-        48,
-        72,
-        96,
-        144,
-        192,
-        384,
-        512
-      ],
+      "sizes": [36, 48, 72, 96, 144, 192, 384, 512],
       "genFavicons": true
     }
   },
-  "browserslist": [
-    "last 1 Chrome versions"
-  ],
+  "browserslist": ["last 1 Chrome versions"],
   "jest": {
     "testEnvironment": "jsdom",
-    "setupFiles": [
-      "<rootDir>/tests/helpers/jest.setup.ts"
-    ],
+    "setupFiles": ["<rootDir>/tests/helpers/jest.setup.ts"],
     "globals": {
       "ts-jest": {
-        "isolatedModules": true
+        "isolatedModules": true,
+        "babelConfig": true
       }
     },
     "moduleNameMapper": {
@@ -63,20 +51,10 @@
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.(svg|txt)$": "<rootDir>/tests/helpers/fileTransformer.js"
     },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)x?$",
     "coverageDirectory": "coverage",
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx,js,jsx}",
-      "!src/**/*.d.ts"
-    ]
+    "collectCoverageFrom": ["src/**/*.{ts,tsx,js,jsx}", "!src/**/*.d.ts"]
   },
   "dependencies": {
     "http-server": "0.12.3",

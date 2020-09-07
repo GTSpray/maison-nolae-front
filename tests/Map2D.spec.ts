@@ -1,46 +1,49 @@
+import { mockAscessors } from "./helpers/mock.helper";
+
 import Map2D from "../src/Map2D";
 import IPlayer from "../src/IPlayer";
 import Pin2D from "../src/Pin2D";
 
-import { mockAscessors } from "./helpers/mock.helper";
-
-const fakePin = {
-  width: 12,
-  height: 21,
-};
-
-jest.mock("../src/Pin2D", () => {
-  return jest.fn().mockImplementation(() => {
-    const instance = {
-      ...fakePin,
-      sprite: "",
-      text: null,
-      x: null,
-      y: null,
-    };    
-    mockAscessors(instance,[ "x", "y"]);
-    Object.defineProperty(
-      instance,
-      "text",
-      (() => {
-        return {
-          set: jest.fn((text) => (instance.sprite = `spriteOf ${text}`)),
-        };
-      })()
-    );
-
-    return instance;
-  });
-});
+jest.mock("../src/Pin2D", () => ({
+  __esModule: true,
+  default: mockAscessors(["sprite", "text", "x", "y", "width", "height"]),
+}));
 
 describe("Map2D", () => {
   describe("refresh", () => {
     const imgW = 120,
       imgH = 140;
     const fakeTexture: HTMLImageElement = new Image(imgW, imgH);
+
+    const fakePin = {
+      sprite: new Image(120, 140),
+      width: -1,
+      height: -2,
+      x: -3,
+      y: -4,
+    };
+
     let map: Map2D, ctx;
     beforeEach(() => {
       map = new Map2D(fakeTexture);
+
+      jest
+        .spyOn(Pin2D.prototype, "sprite", "get")
+        .mockReturnValue(fakePin.sprite);
+      jest
+        .spyOn(Pin2D.prototype, "width", "get")
+        .mockReturnValue(fakePin.width);
+
+      jest
+        .spyOn(Pin2D.prototype, "height", "get")
+        .mockReturnValue(fakePin.height);
+
+      jest
+        .spyOn(Pin2D.prototype, "height", "get")
+        .mockReturnValue(fakePin.height);
+
+      jest.spyOn(Pin2D.prototype, "x", "get").mockReturnValue(fakePin.x);
+      jest.spyOn(Pin2D.prototype, "y", "get").mockReturnValue(fakePin.y);
 
       ctx = {
         fillRect: jest.fn(),
@@ -73,6 +76,7 @@ describe("Map2D", () => {
       ]);
 
       beforeEach(() => {
+        (Pin2D as jest.Mock).mockClear;
         ctx.drawImage.mockClear();
         players.forEach((p) => {
           const [, player] = p;
@@ -81,15 +85,18 @@ describe("Map2D", () => {
         map.refresh(ctx);
       });
 
+      it("should print players", () => {
+        expect(ctx.drawImage).toHaveBeenCalledTimes(players.length + 1);
+      });
+
       it.each(players)(
         "should draw a pin who represent player%d's postion",
         (i, player: IPlayer) => {
-          expect(ctx.drawImage).toHaveBeenCalledTimes(players.length + 1);
           expect(ctx.drawImage).toHaveBeenNthCalledWith(
             i + 2,
-            `spriteOf ${player.pseudo}`,
-            player.x,
-            player.y,
+            fakePin.sprite,
+            fakePin.x,
+            fakePin.y,
             fakePin.width,
             fakePin.height
           );
@@ -126,19 +133,6 @@ describe("Map2D", () => {
         it("should print other players", () => {
           expect(ctx.drawImage).toHaveBeenCalledTimes(players.length + 1);
         });
-
-        it.each(invisiblePlayers)(
-          "when player has %s",
-          (_reason, player: IPlayer) => {
-            expect(ctx.drawImage).not.toHaveBeenCalledWith(
-              `spriteOf ${player.pseudo}`,
-              player.x,
-              player.y,
-              fakePin.width,
-              fakePin.height
-            );
-          }
-        );
       });
     });
   });
@@ -156,17 +150,29 @@ describe("Map2D", () => {
         x: 0,
         y: 0,
       };
-      map.set(player, fakeBanner);
     });
 
     describe("should create a Pin correspond player", () => {
       it("should create new Pin with player", () => {
+        map.set(player, fakeBanner);
         expect(Pin2D).toHaveBeenCalledWith(fakeBanner, player.pseudo, 400, 240);
       });
 
-      it.todo("should set text with player.pseudo after creation")
-      it.todo("should set x with player.x after creation")
-      it.todo("should set y with player.y after creation")
+      it("should set text with player.pseudo after creation", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "text", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.pseudo);
+      });
+      it("should set x with player.x after creation", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "x", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.x);
+      });
+      it("should set y with player.y after creation", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "y", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.y);
+      });
     });
 
     describe("should not recreate a pin for the same player", () => {
@@ -179,15 +185,27 @@ describe("Map2D", () => {
         }
       );
       it("unless the id changes", () => {
+        map.set(player, fakeBanner);
         player.id = "newId";
         map.set(player, fakeBanner);
         expect(Pin2D).toHaveBeenCalledTimes(2);
       });
 
-      it.todo("should set text with player.pseudo after update")
-      it.todo("should set x with player.x after update")
-      it.todo("should set y with player.y after update")
-
+      it("should set text with player.pseudo after update", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "text", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.pseudo);
+      });
+      it("should set x with player.x after update", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "x", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.x);
+      });
+      it("should set y with player.y after update", () => {
+        const spy = jest.spyOn(Pin2D.prototype, "y", "set");
+        map.set(player, fakeBanner);
+        expect(spy).toHaveBeenCalledWith(player.y);
+      });
     });
   });
 });
