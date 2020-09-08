@@ -216,16 +216,26 @@ describe("Map2D", () => {
     const fakeUrl = "my-url";
     let fakeLoader: jest.Mock;
     beforeEach(() => {
-      fakeLoader = jest.spyOn(RessourcesLoader, "loadImage");
+      fakeLoader = jest.spyOn(RessourcesLoader, "loadImage") as jest.Mock;
     });
 
     it("should call RessourceLoader.loadImage for getting texture", async () => {
       const fakeTexture = new Image(1, 1);
       fakeLoader.mockResolvedValue(fakeTexture);
       const map = await Map2D.load(fakeUrl);
-      expect(RessourcesLoader.loadImage).toBeCalledWith(fakeUrl);
-      // expect(Map2D).toBeCalledWith(fakeTexture);
       expect(map).toBeTruthy();
+      expect(map.texture).toBe(fakeTexture);
+    });
+
+    it("should log error when RessourceLoader.loadImage fail", async () => {
+      const err = { message: "error" };
+      jest.spyOn(console, 'error').mockImplementation();
+      fakeLoader.mockRejectedValue(err);
+
+      await expect(async ()=>{
+        await Map2D.load(fakeUrl)
+      }).rejects.toThrow( `Impossible de charger la carte "${fakeUrl}"`)
+      expect(console.error).toHaveBeenCalledWith(err)
     });
   });
 });
