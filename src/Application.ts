@@ -1,12 +1,13 @@
-import Player from "./Player";
+import IPlayer from "./IPlayer";
 import Map2D from "./Map2D";
 import WS from "./WS";
 import RessourcesLoader, { HttpMethod } from "./RessourcesLoader";
 import UserInteraction from "./UserInteraction";
 import Animation from "./Animation";
 
-import Ajv from "ajv";
-const ajv = new Ajv();
+import ajv from "ajv";
+import Banner from "./banner/Banner";
+const Ajv = new ajv();
 
 export interface ApplicationConfiguration {
   mapUrl: string;
@@ -20,16 +21,16 @@ export interface ApplicationConfiguration {
 }
 
 export default class Application {
-  private _debug: boolean = false;
+  private _debug = false;
 
-  private _me: Player;
+  private _me: IPlayer;
   private _house: Map2D | null;
   private _ws: WS;
   private _ui: UserInteraction;
 
   private _config: ApplicationConfiguration;
 
-  private _apiContracts: any;
+  private _apiContracts: unknown;
   private _token: string;
 
   constructor(config: ApplicationConfiguration) {
@@ -37,15 +38,18 @@ export default class Application {
       id: null,
       pseudo: "",
       x: 0,
-      y: 0
+      y: 0,
     };
+    
+    this._house = null;
+    this._token= "";
 
     this._config = config;
 
     this._ws = new WS();
     this._ui = new UserInteraction({
       clickArea: this._config.canvas,
-      pseudo: this._config.pseudo
+      pseudo: this._config.pseudo,
     });
 
     if (this._debug) {
@@ -54,7 +58,7 @@ export default class Application {
     }
   }
 
-  async start() {
+  async start(): Promise<boolean> {
     await this.load();
 
     const house = (this._house = await Map2D.load(this._config.mapUrl));
@@ -75,13 +79,13 @@ export default class Application {
     this._ui.click.subscribe((position) => {
       const newMe = {
         ...this._me,
-        ...position
+        ...position,
       };
-      if (ajv.validate(this._apiContracts["player"], newMe)) {
+      if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me
+          payload: this._me,
         });
       }
     });
@@ -89,13 +93,13 @@ export default class Application {
     this._ui.pseudo.subscribe((pseudo) => {
       const newMe = {
         ...this._me,
-        pseudo
+        pseudo,
       };
-      if (ajv.validate(this._apiContracts["player"], newMe)) {
+      if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me
+          payload: this._me,
         });
       }
     });
@@ -103,7 +107,7 @@ export default class Application {
     this._ui.event.subscribe((e) => {
       switch (e.type) {
         case "pseudo":
-          this._config.nope.checked = ajv.validate(
+          this._config.nope.checked = Ajv.validate(
             this._apiContracts["player"]["properties"]["pseudo"],
             this._config.pseudo.value
           ) as boolean;
@@ -124,23 +128,23 @@ export default class Application {
       }
     });
 
-    const pinSprite = await RessourcesLoader.loadImage(
-      this._config.pinSpriteUrl
-    );
+    const banner = await Banner.load();
 
     this._ws.player.subscribe((player) => {
-      house.set(player, pinSprite);
+      house.set(player, banner);
     });
 
-    const playerList: Player[] = (await RessourcesLoader.httpRequest({
+    const playerList: IPlayer[] = (await RessourcesLoader.httpRequest({
       method: HttpMethod.GET,
       url: `${this._config.backendendpoint}/players`,
-      responseType: "json"
-    })) as Player[];
+      responseType: "json",
+    })) as IPlayer[];
 
-    playerList.forEach((player) => {
-      house.set(player, pinSprite);
-    });
+    for (const player of playerList) {
+      house.set(player, banner);
+    }
+
+    return true;
   }
 
   private async load() {
@@ -148,7 +152,7 @@ export default class Application {
       this._apiContracts = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
         url: `${this._config.backendendpoint}/contracts`,
-        responseType: "json"
+        responseType: "json",
       });
     } catch (error) {
       throw new Error("Unable to load api contracts");
@@ -164,9 +168,12 @@ export default class Application {
           url: `${this._config.backendendpoint}/auth`,
           responseType: "json",
           params: {
-            code: discordAuthCode
-          }
-        });
+            code: discordAuthCode,
+          },
+        }) as {
+          player: IPlayer,
+          token: string
+        }
         this._me.id = auth.player.id;
         this._me.pseudo = auth.player.pseudo;
         this._config.pseudo.value = auth.player.pseudo;

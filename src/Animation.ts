@@ -21,10 +21,11 @@ export default class Animation {
     this.event = new Subject();
     this._tref = this._time = this._frame = this._delay = -1;
 
+    this._fps = 0;
     this.fps = fps;
   }
 
-  loop(time: number) {
+  loop(time: number): void {
     if (this._time === null) {
       this._time = time;
     }
@@ -36,9 +37,9 @@ export default class Animation {
       const frame = this._frame - cycle * this._fps;
 
       this.event.next({
-        time: time,
+        time,
         frame,
-        cycle
+        cycle,
       });
     }
 
@@ -51,14 +52,14 @@ export default class Animation {
     this._frame = this._time = -1;
   }
 
-  start() {
+  start(): void {
     if (!this._isPlaying) {
       this._isPlaying = true;
       this._tref = requestAnimationFrame((t) => this.loop(t));
     }
   }
 
-  pause() {
+  pause(): void {
     if (this._isPlaying) {
       cancelAnimationFrame(this._tref);
       this._isPlaying = false;

@@ -1,0 +1,34 @@
+{
+  "extends": ["@parcel/config-default"],
+  "resolvers": ["@parcel/resolver-default"],
+  "bundler": "@parcel/bundler-default",
+  "transforms": {
+    "*.vue": ["@parcel/transform-vue"],
+    "*.scss": ["@parcel/transform-sass"],
+    "*.js": ["@parcel/transform-babel"],
+    "*.css": ["@parcel/transform-postcss"],
+    "*.xcss": ["parcel-plugin-text"],
+    "*.html": ["@parcel/transform-posthtml"]
+  },
+  "packagers": {
+    "*.js": "@parcel/packager-js",
+    "*.css": "@parcel/packager-css",
+    "*.xcss": "parcel-plugin-text",
+    "*.html": "@parcel/packager-html",
+    "*.wasm": "@parcel/packager-wasm",
+    "*.raw": "@parcel/packager-raw"
+  },
+  "optimizers": {
+    "*.js": ["@parcel/optimizer-uglify"],
+    "*.css": ["@parcel/optimizer-cssnano"],
+    "*.xcss": ["@parcel/optimizer-cssnano"],
+    "*.html": ["@parcel/optimizer-htmlnano"],
+    "*.{png,jpg,jpeg,svg,...}": ["@parcel/optimizer-imagemin"]
+  },
+  "loaders": {
+    "*.js": "@parcel/loader-js",
+    "*.wasm": "@parcel/loader-wasm",
+    "*.xcss": "parcel-plugin-text"
+  },
+  "reporters": ["@parcel/reporter-detailed"]
+}

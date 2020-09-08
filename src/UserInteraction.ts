@@ -30,12 +30,12 @@ export default class UserInteraction {
     const rect = this._config.clickArea.getBoundingClientRect();
     this.click.next({
       y: mouse.y - rect.top,
-      x: mouse.x - rect.left
+      x: mouse.x - rect.left,
     });
     this.event.next(new Event("click"));
   }
 
-  enable() {
+  enable(): void {
     this._config.clickArea.addEventListener(
       "mousedown",
       (e) => this.onClick(e),
@@ -44,7 +44,7 @@ export default class UserInteraction {
     this._config.pseudo.addEventListener("input", () => this.onPseudoChange());
   }
 
-  desable() {
+  desable(): void {
     this._config.clickArea.removeEventListener("mousedown", (e) =>
       this.onClick(e)
     );
