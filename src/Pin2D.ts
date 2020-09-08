@@ -9,7 +9,7 @@ export default class Pin2D {
   private _y: number;
   private _text: string;
 
-  constructor(banners: HTMLElement, text: string, w?: number, h?: number) {
+  constructor(banners: HTMLElement, w?: number, h?: number) {
     this._banner = new Banner(banners);
 
     const { width: bw, height: bh } = banners.getBoundingClientRect();
@@ -24,10 +24,6 @@ export default class Pin2D {
     this._x = 0;
     this._y = 0;
     this._text = "";
-
-    this.x = 0;
-    this.y = 0;
-    this.text = text;
   }
 
   get sprite(): HTMLImageElement {

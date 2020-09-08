@@ -28,7 +28,7 @@ export default class Map2D {
     const id = player.id as string;
     if (player.x !== undefined && player.y !== undefined) {
       if (!this.pins.has(id)) {
-        this.pins.set(id, new Pin2D(banner, player.pseudo, 400, 240));
+        this.pins.set(id, new Pin2D(banner, 400, 240));
       }
       const pin: Pin2D = this.pins.get(id) as Pin2D;
       pin.text = player.pseudo;

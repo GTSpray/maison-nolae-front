@@ -158,7 +158,7 @@ describe("Map2D", () => {
     describe("should create a Pin correspond player", () => {
       it("should create new Pin with player", () => {
         map.set(player, fakeBanner);
-        expect(Pin2D).toHaveBeenCalledWith(fakeBanner, player.pseudo, 400, 240);
+        expect(Pin2D).toHaveBeenCalledWith(fakeBanner, 400, 240);
       });
 
       it("should set text with player.pseudo after creation", () => {
