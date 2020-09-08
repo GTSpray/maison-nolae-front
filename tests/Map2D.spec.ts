@@ -3,11 +3,14 @@ import { mockAscessors } from "./helpers/mock.helper";
 import Map2D from "../src/Map2D";
 import IPlayer from "../src/IPlayer";
 import Pin2D from "../src/Pin2D";
+import RessourcesLoader from "../src/RessourcesLoader";
 
 jest.mock("../src/Pin2D", () => ({
   __esModule: true,
   default: mockAscessors(["sprite", "text", "x", "y", "width", "height"]),
 }));
+
+jest.mock("../src/RessourcesLoader");
 
 describe("Map2D", () => {
   describe("refresh", () => {
@@ -91,7 +94,7 @@ describe("Map2D", () => {
 
       it.each(players)(
         "should draw a pin who represent player%d's postion",
-        (i, player: IPlayer) => {
+        (i) => {
           expect(ctx.drawImage).toHaveBeenNthCalledWith(
             i + 2,
             fakePin.sprite,
@@ -179,6 +182,7 @@ describe("Map2D", () => {
       it.each(["pseudo", "x", "y"])(
         'even if the value of "%s" changes',
         (attribute) => {
+          map.set(player, fakeBanner);
           player[attribute] = `updated${attribute}`;
           map.set(player, fakeBanner);
           expect(Pin2D).toHaveBeenCalledTimes(1);
@@ -206,6 +210,22 @@ describe("Map2D", () => {
         map.set(player, fakeBanner);
         expect(spy).toHaveBeenCalledWith(player.y);
       });
+    });
+  });
+  describe("load", () => {
+    const fakeUrl = "my-url";
+    let fakeLoader: jest.Mock;
+    beforeEach(() => {
+      fakeLoader = jest.spyOn(RessourcesLoader, "loadImage");
+    });
+
+    it("should call RessourceLoader.loadImage for getting texture", async () => {
+      const fakeTexture = new Image(1, 1);
+      fakeLoader.mockResolvedValue(fakeTexture);
+      const map = await Map2D.load(fakeUrl);
+      expect(RessourcesLoader.loadImage).toBeCalledWith(fakeUrl);
+      // expect(Map2D).toBeCalledWith(fakeTexture);
+      expect(map).toBeTruthy();
     });
   });
 });
