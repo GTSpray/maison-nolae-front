@@ -26,15 +26,13 @@ body {
     display: none;
     #kanvas {
       z-index: 1;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
     #panel {
       margin: 1em;
       z-index: 2;
       position: fixed;
-
+      top: 0;
+      left: 0;
       > * {
         vertical-align: middle;
         display: inline-block;
