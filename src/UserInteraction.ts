@@ -45,10 +45,11 @@ export default class UserInteraction {
     this._config.clickArea.addEventListener(
       "touchend",
       (e) => {
-        if (e.cancelable) {
+        if (typeof e.cancelable !== 'boolean' || e.cancelable) {
           e.preventDefault();
-          e.stopPropagation();
-       }
+        }
+
+        e.stopPropagation();
       },
       false
     );
@@ -77,20 +78,20 @@ export default class UserInteraction {
     this.event.next(new Event("pseudo"));
   }
 
-  private onClick(mouse: MouseEvent) {
-    if (mouse.cancelable) {
-      mouse.preventDefault();
-      mouse.stopPropagation();
-
-      this._config.pseudo.blur();
-
-      const position: MousePosition = getMousePosition(
-        this._config.clickArea,
-        mouse
-      );
-      this.click.next(position);
-      this.event.next(new Event("click"));
+  private onClick(e: MouseEvent) {
+    if (typeof e.cancelable !== 'boolean' || e.cancelable) {
+      e.preventDefault();
     }
+    e.stopPropagation();
+
+    this._config.pseudo.blur();
+
+    const position: MousePosition = getMousePosition(
+      this._config.clickArea,
+      e
+    );
+    this.click.next(position);
+    this.event.next(new Event("click"));
   }
 
   enable(): void {
