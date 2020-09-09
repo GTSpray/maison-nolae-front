@@ -36,24 +36,39 @@ export default class UserInteraction {
 
     if (isMobile) {
       // Prevent scrolling when touching the canvas
-      document.body.addEventListener(
+      this._config.clickArea.addEventListener(
         "touchstart",
-        function (e) {
-          e.preventDefault();
+        (e) => {
+          const touch = e.touches[0];
+          const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          this._config.clickArea.dispatchEvent(mouseEvent);
         },
         false
       );
-      document.body.addEventListener(
+      this._config.clickArea.addEventListener(
         "touchend",
-        function (e) {
-          e.preventDefault();
+        (e) => {
+          const touch = e.touches[0];
+          const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          this._config.clickArea.dispatchEvent(mouseEvent);
         },
         false
       );
-      document.body.addEventListener(
+      this._config.clickArea.addEventListener(
         "touchmove",
-        function (e) {
-          e.preventDefault();
+        (e) => {
+          const touch = e.touches[0];
+          const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          this._config.clickArea.dispatchEvent(mouseEvent);
         },
         false
       );
@@ -68,10 +83,12 @@ export default class UserInteraction {
   }
 
   private onClick(mouse: MouseEvent) {
+    mouse.preventDefault();
+    mouse.stopPropagation();
     const rect = this._config.clickArea.getBoundingClientRect();
     this.click.next({
       y: mouse.y - rect.top,
-      x: mouse.x - rect.left,
+      x: mouse.x - rect.left
     });
     this.event.next(new Event("click"));
     mouse.preventDefault();
