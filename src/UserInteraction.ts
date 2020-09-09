@@ -5,10 +5,9 @@ export interface UserInteractionConfiguration {
   pseudo: HTMLInputElement;
 }
 
-
 export interface MousePosition {
-  x: number,
-  y: number
+  x: number;
+  y: number;
 }
 
 function getMousePosition(
@@ -18,7 +17,7 @@ function getMousePosition(
   const rect = element.getBoundingClientRect();
   return {
     x: event.clientX - rect.left,
-    y: event.clientY - rect.top
+    y: event.clientY - rect.top,
   };
 }
 
@@ -46,8 +45,10 @@ export default class UserInteraction {
     this._config.clickArea.addEventListener(
       "touchend",
       (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.cancelable) {
+          e.preventDefault();
+          e.stopPropagation();
+       }
       },
       false
     );
@@ -77,14 +78,19 @@ export default class UserInteraction {
   }
 
   private onClick(mouse: MouseEvent) {
-    mouse.preventDefault();
-    mouse.stopPropagation();
+    if (mouse.cancelable) {
+      mouse.preventDefault();
+      mouse.stopPropagation();
 
-    this._config.pseudo.blur();
+      this._config.pseudo.blur();
 
-    const position: MousePosition = getMousePosition(this._config.clickArea, mouse);
-    this.click.next(position);
-    this.event.next(new Event("click"));
+      const position: MousePosition = getMousePosition(
+        this._config.clickArea,
+        mouse
+      );
+      this.click.next(position);
+      this.event.next(new Event("click"));
+    }
   }
 
   enable(): void {
