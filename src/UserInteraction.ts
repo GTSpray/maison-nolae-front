@@ -5,11 +5,37 @@ export interface UserInteractionConfiguration {
   pseudo: HTMLInputElement;
 }
 
+
+export interface MousePosition {
+  x: number,
+  y: number
+}
+
+function getMousePosition(
+  element: HTMLElement,
+  event: MouseEvent
+): MousePosition {
+  let totalOffsetX = 0;
+  let totalOffsetY = 0;
+  let canvasX = 0;
+  let canvasY = 0;
+  let currentElement = element;
+
+  do {
+    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+    currentElement = currentElement.offsetParent as HTMLElement;
+  } while (currentElement);
+  canvasX = event.pageX - totalOffsetX;
+  canvasY = event.pageY - totalOffsetY;
+  return { x: canvasX, y: canvasY };
+}
+
 export default class UserInteraction {
   private _config: UserInteractionConfiguration;
 
   public event: Subject<Event>;
-  public click: Subject<{ x: number; y: number }>;
+  public click: Subject<MousePosition>;
   public pseudo: Subject<string>;
 
   constructor(conf: UserInteractionConfiguration) {
@@ -22,39 +48,34 @@ export default class UserInteraction {
     this._config.clickArea.addEventListener(
       "touchstart",
       (e) => {
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        });
-        this._config.clickArea.dispatchEvent(mouseEvent);
+        this.dispatchEventMouse(e);
       },
       false
     );
     this._config.clickArea.addEventListener(
       "touchend",
       (e) => {
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        });
-        this._config.clickArea.dispatchEvent(mouseEvent);
+        e.preventDefault();
+        e.stopPropagation();
       },
       false
     );
     this._config.clickArea.addEventListener(
       "touchmove",
       (e) => {
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        });
-        this._config.clickArea.dispatchEvent(mouseEvent);
+        this.dispatchEventMouse(e);
       },
       false
     );
+  }
+
+  private dispatchEventMouse(e: TouchEvent) {
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent("mousedown", {
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    });
+    this._config.clickArea.dispatchEvent(mouseEvent);
   }
 
   private onPseudoChange() {
@@ -67,13 +88,8 @@ export default class UserInteraction {
   private onClick(mouse: MouseEvent) {
     mouse.preventDefault();
     mouse.stopPropagation();
-    const rect = this._config.clickArea.getBoundingClientRect();
-    this.click.next({
-      y: mouse.y - rect.top,
-      x: mouse.x - rect.left,
-    });
+    this.click.next(getMousePosition(this._config.clickArea, mouse));
     this.event.next(new Event("click"));
-    mouse.preventDefault();
   }
 
   enable(): void {
