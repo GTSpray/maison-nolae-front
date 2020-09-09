@@ -15,20 +15,11 @@ function getMousePosition(
   element: HTMLElement,
   event: MouseEvent
 ): MousePosition {
-  let totalOffsetX = 0;
-  let totalOffsetY = 0;
-  let canvasX = 0;
-  let canvasY = 0;
-  let currentElement = element;
-
-  do {
-    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-    currentElement = currentElement.offsetParent as HTMLElement;
-  } while (currentElement);
-  canvasX = event.pageX - totalOffsetX;
-  canvasY = event.pageY - totalOffsetY;
-  return { x: canvasX, y: canvasY };
+  const rect = element.getBoundingClientRect();
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
 }
 
 export default class UserInteraction {
@@ -88,7 +79,11 @@ export default class UserInteraction {
   private onClick(mouse: MouseEvent) {
     mouse.preventDefault();
     mouse.stopPropagation();
-    this.click.next(getMousePosition(this._config.clickArea, mouse));
+
+    this._config.pseudo.blur();
+
+    const position: MousePosition = getMousePosition(this._config.clickArea, mouse);
+    this.click.next(position);
     this.event.next(new Event("click"));
   }
 
