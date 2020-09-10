@@ -21,7 +21,7 @@ export interface ApplicationConfiguration {
 }
 
 export default class Application {
-  private _debug = false;
+  private _debug = true;
 
   private _me: IPlayer;
   private _house: Map2D | null;
@@ -38,18 +38,18 @@ export default class Application {
       id: null,
       pseudo: "",
       x: 0,
-      y: 0,
+      y: 0
     };
-    
+
     this._house = null;
-    this._token= "";
+    this._token = "";
 
     this._config = config;
 
     this._ws = new WS();
     this._ui = new UserInteraction({
       clickArea: this._config.canvas,
-      pseudo: this._config.pseudo,
+      pseudo: this._config.pseudo
     });
 
     if (this._debug) {
@@ -79,13 +79,18 @@ export default class Application {
     this._ui.click.subscribe((position) => {
       const newMe = {
         ...this._me,
-        ...position,
+        ...position
       };
       if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me,
+          payload: this._me
+        });
+      } else {
+        console.error({
+          error: "Player is bad formated",
+          player: newMe
         });
       }
     });
@@ -93,13 +98,18 @@ export default class Application {
     this._ui.pseudo.subscribe((pseudo) => {
       const newMe = {
         ...this._me,
-        pseudo,
+        pseudo
       };
       if (Ajv.validate(this._apiContracts["player"], newMe)) {
         this._me = newMe;
         this._ws.send({
           type: "player",
-          payload: this._me,
+          payload: this._me
+        });
+      } else {
+        console.error({
+          error: "Player is bad formated",
+          player: newMe
         });
       }
     });
@@ -137,7 +147,7 @@ export default class Application {
     const playerList: IPlayer[] = (await RessourcesLoader.httpRequest({
       method: HttpMethod.GET,
       url: `${this._config.backendendpoint}/players`,
-      responseType: "json",
+      responseType: "json"
     })) as IPlayer[];
 
     for (const player of playerList) {
@@ -152,7 +162,7 @@ export default class Application {
       this._apiContracts = await RessourcesLoader.httpRequest({
         method: HttpMethod.GET,
         url: `${this._config.backendendpoint}/contracts`,
-        responseType: "json",
+        responseType: "json"
       });
     } catch (error) {
       throw new Error("Unable to load api contracts");
@@ -163,17 +173,17 @@ export default class Application {
     if (discordAuthCode) {
       window.history.pushState({}, document.title, "/");
       try {
-        const auth = await RessourcesLoader.httpRequest({
+        const auth = (await RessourcesLoader.httpRequest({
           method: HttpMethod.POST,
           url: `${this._config.backendendpoint}/auth`,
           responseType: "json",
           params: {
-            code: discordAuthCode,
-          },
-        }) as {
-          player: IPlayer,
-          token: string
-        }
+            code: discordAuthCode
+          }
+        })) as {
+          player: IPlayer;
+          token: string;
+        };
         this._me.id = auth.player.id;
         this._me.pseudo = auth.player.pseudo;
         this._config.pseudo.value = auth.player.pseudo;

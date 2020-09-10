@@ -16,8 +16,8 @@ function getMousePosition(
 ): MousePosition {
   const rect = element.getBoundingClientRect();
   return {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top,
+    x: Math.round(event.clientX - rect.left),
+    y: Math.round(event.clientY - rect.top)
   };
 }
 
@@ -45,7 +45,7 @@ export default class UserInteraction {
     this._config.clickArea.addEventListener(
       "touchend",
       (e) => {
-        if (typeof e.cancelable !== 'boolean' || e.cancelable) {
+        if (typeof e.cancelable !== "boolean" || e.cancelable) {
           e.preventDefault();
         }
 
@@ -66,7 +66,7 @@ export default class UserInteraction {
     const touch = e.touches[0];
     const mouseEvent = new MouseEvent("mousedown", {
       clientX: touch.clientX,
-      clientY: touch.clientY,
+      clientY: touch.clientY
     });
     this._config.clickArea.dispatchEvent(mouseEvent);
   }
@@ -79,17 +79,14 @@ export default class UserInteraction {
   }
 
   private onClick(e: MouseEvent) {
-    if (typeof e.cancelable !== 'boolean' || e.cancelable) {
+    if (typeof e.cancelable !== "boolean" || e.cancelable) {
       e.preventDefault();
     }
     e.stopPropagation();
 
     this._config.pseudo.blur();
 
-    const position: MousePosition = getMousePosition(
-      this._config.clickArea,
-      e
-    );
+    const position: MousePosition = getMousePosition(this._config.clickArea, e);
     this.click.next(position);
     this.event.next(new Event("click"));
   }
