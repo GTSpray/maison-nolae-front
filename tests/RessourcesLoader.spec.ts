@@ -117,7 +117,7 @@ describe("RessourcesLoader", () => {
     );
 
     it.each(Object.values(HttpMethod).filter((e) => e !== HttpMethod.GET))(
-      "should add content-type header in %d request",
+      "should add content-type header in %s request",
       async (method) => {
         opts.method = method;
         fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
@@ -137,7 +137,7 @@ describe("RessourcesLoader", () => {
     );
 
     it.each(Object.values(HttpMethod).filter((e) => e !== HttpMethod.GET))(
-      "should call send with stringified params in %d request",
+      "should call send with stringified params in %s request",
       async (method) => {
         opts.method = method;
         fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
