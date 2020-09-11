@@ -81,7 +81,8 @@ export default class RessourcesLoader {
 
       switch (opts.method) {
         case HttpMethod.GET: {
-          xhr.open(opts.method, `${opts.url}?${params.join('&')}`);
+          const endPoint = params.length > 0 ? `?${params.join('&')}` : '';
+          xhr.open(opts.method, `${opts.url}${endPoint}`);
           const headers = opts.headers || {};
           for (const key in headers) {
             if (Object.prototype.hasOwnProperty.call(headers, key)) {
