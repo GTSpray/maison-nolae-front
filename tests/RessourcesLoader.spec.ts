@@ -320,4 +320,18 @@ describe("RessourcesLoader", () => {
       });
     });
   });
+  
+  describe('getXMLHttpRequest', () => {
+        it.todo('should return XMLHttpRequest if possible')
+        it.todo('should return ActiveXObject if no XMLHttpRequest')
+        it.todo('should try to ActiveXObject("Msxml2.XMLHTTP")')
+        it.todo('should try to ActiveXObject("Microsoft.XMLHTTP")')
+        it.todo('should return null if no XHR possible')
+  });
+
+  describe('loadImage', () => {
+    it.todo('should resolve an image')
+    it.todo('should set image.src with url')
+    it.todo('should reject src when image is not complete')
+  });
 });
