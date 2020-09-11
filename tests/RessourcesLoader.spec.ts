@@ -212,15 +212,13 @@ describe("RessourcesLoader", () => {
               }
             );
             expect.assertions(1);
-            try {
-              await RessourcesLoader.httpRequest(opts);
-            } catch (error) {
-              expect(error).toStrictEqual({
-                opts,
-                status: fakeXHR.status,
-                statusText: fakeXHR.statusText,
-              });
-            }
+            await expect(
+              RessourcesLoader.httpRequest(opts)
+            ).rejects.toStrictEqual({
+              opts,
+              status: fakeXHR.status,
+              statusText: fakeXHR.statusText,
+            });
           });
         });
 
@@ -248,15 +246,13 @@ describe("RessourcesLoader", () => {
               }
             );
             expect.assertions(1);
-            try {
-              await RessourcesLoader.httpRequest(opts);
-            } catch (error) {
-              expect(error).toStrictEqual({
-                opts,
-                status: fakeXHR.status,
-                statusText: fakeXHR.statusText,
-              });
-            }
+            await expect(
+              RessourcesLoader.httpRequest(opts)
+            ).rejects.toStrictEqual({
+              opts,
+              status: fakeXHR.status,
+              statusText: fakeXHR.statusText,
+            });
           });
         });
 
@@ -275,15 +271,13 @@ describe("RessourcesLoader", () => {
               }
             );
             expect.assertions(1);
-            try {
-              await RessourcesLoader.httpRequest(opts);
-            } catch (error) {
-              expect(error).toStrictEqual({
-                opts,
-                status: fakeXHR.status,
-                statusText: fakeXHR.statusText,
-              });
-            }
+            await expect(
+              RessourcesLoader.httpRequest(opts)
+            ).rejects.toStrictEqual({
+              opts,
+              status: fakeXHR.status,
+              statusText: fakeXHR.statusText,
+            });
           });
         });
 
@@ -299,15 +293,13 @@ describe("RessourcesLoader", () => {
               }
             );
             expect.assertions(1);
-            try {
-              await RessourcesLoader.httpRequest(opts);
-            } catch (error) {
-              expect(error).toStrictEqual({
-                opts,
-                status: fakeXHR.status,
-                statusText: fakeXHR.statusText,
-              });
-            }
+            await expect(
+              RessourcesLoader.httpRequest(opts)
+            ).rejects.toStrictEqual({
+              opts,
+              status: fakeXHR.status,
+              statusText: fakeXHR.statusText,
+            });
           });
         });
       });
@@ -320,15 +312,11 @@ describe("RessourcesLoader", () => {
         });
         expect.assertions(1);
 
-        try {
-          await RessourcesLoader.httpRequest(opts);
-        } catch (error) {
-          expect(error).toStrictEqual({
-            opts,
-            status: fakeXHR.status,
-            statusText: fakeXHR.statusText,
-          });
-        }
+        await expect(RessourcesLoader.httpRequest(opts)).rejects.toStrictEqual({
+          opts,
+          status: fakeXHR.status,
+          statusText: fakeXHR.statusText,
+        });
       });
     });
   });
