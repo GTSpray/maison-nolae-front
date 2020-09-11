@@ -1,9 +1,10 @@
-import RessourcesLoader from "../src/RessourcesLoader";
+import RessourcesLoader, {RequestOptions, HttpMethod} from "../src/RessourcesLoader";
 
 describe("RessourcesLoader", () => {
   describe("httpRequest", () => {
-    const opts = {
-      method: "GET"
+    const opts: RequestOptions = {
+      method: HttpMethod.GET,
+      url: 'my-url'
     };
 
     let fakeXHR;
@@ -49,23 +50,68 @@ describe("RessourcesLoader", () => {
       });
     });
 
-    describe.skip("should reject resolve xhr.response for redirect request", () => {
+    describe("should reject xhr.response for redirect request", () => {
       const statusCases = Array.from({ length: 100 }, (v, i) => i + 300);
       it.each(statusCases)("when response.status is %s", async (status) => {
         fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
           if (evnt === "load") {
+            fakeXHR.status = status;
             callback();
           }
         });
-        fakeXHR.status = status;
-
-        await expect(async () => {
+        expect.assertions(1)
+        try {
           await RessourcesLoader.httpRequest(opts);
-        }).rejects.toThrow({
-          opts,
-          status: fakeXHR.status,
-          statusText: fakeXHR.statusText
+        } catch (error) {
+          expect(error).toStrictEqual({
+            opts,
+            status: fakeXHR.status,
+            statusText: fakeXHR.statusText
+          })
+        }
+      });
+    });
+
+    describe("should reject xhr.response for client side error request", () => {
+      const statusCases = Array.from({ length: 100 }, (v, i) => i + 400);
+      it.each(statusCases)("when response.status is %s", async (status) => {
+        fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
+          if (evnt === "load") {
+            fakeXHR.status = status;
+            callback();
+          }
         });
+        expect.assertions(1)
+        try {
+          await RessourcesLoader.httpRequest(opts);
+        } catch (error) {
+          expect(error).toStrictEqual({
+            opts,
+            status: fakeXHR.status,
+            statusText: fakeXHR.statusText
+          })
+        }
+      });
+    });
+    describe("should reject xhr.response for server side error request", () => {
+      const statusCases = Array.from({ length: 100 }, (v, i) => i + 500);
+      it.each(statusCases)("when response.status is %s", async (status) => {
+        fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
+          if (evnt === "load") {
+            fakeXHR.status = status;
+            callback();
+          }
+        });
+        expect.assertions(1)
+        try {
+          await RessourcesLoader.httpRequest(opts);
+        } catch (error) {
+          expect(error).toStrictEqual({
+            opts,
+            status: fakeXHR.status,
+            statusText: fakeXHR.statusText
+          })
+        }
       });
     });
   });
