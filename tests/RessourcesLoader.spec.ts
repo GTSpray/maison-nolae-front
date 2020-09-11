@@ -11,7 +11,6 @@ function rangeArray(min, max) {
 describe("RessourcesLoader", () => {
   describe("httpRequest", () => {
     let opts: RequestOptions;
-
     let fakeXHR;
     beforeEach(() => {
       jest.clearAllMocks();
@@ -23,6 +22,7 @@ describe("RessourcesLoader", () => {
         addEventListener: jest.fn(),
         open: jest.fn(),
         send: jest.fn(),
+        setRequestHeader: jest.fn()
       };
       opts = {
         method: HttpMethod.GET,
@@ -33,26 +33,62 @@ describe("RessourcesLoader", () => {
         .mockReturnValue(fakeXHR);
     });
 
-    it("should call RessourcesLoader.getXMLHttpRequest for getting xhr", async () => {
-      fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
-        if (evnt === "load") {
-          fakeXHR.send.mockImplementationOnce(callback);
+
+      describe.each(Object.values(HttpMethod))(
+        'for %s request',
+        (method: HttpMethod) => {
+
+          beforeEach(()=>{
+            opts.method = method;
+            fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
+              if (evnt === "load") {
+                fakeXHR.status = 200;
+                fakeXHR.send.mockImplementationOnce(callback);
+              }
+            });
+          })
+
+          it("should call RessourcesLoader.getXMLHttpRequest for getting xhr", async () => {
+            await RessourcesLoader.httpRequest(opts);
+            expect(RessourcesLoader.getXMLHttpRequest).toHaveBeenCalled();
+          });
+    
+          it("should listen load event", async () => {
+            await RessourcesLoader.httpRequest(opts);
+            expect(fakeXHR.addEventListener).toHaveBeenCalledWith('load', expect.any(Function));
+          });
+      
+          it("should listen error event", async () => {
+            await RessourcesLoader.httpRequest(opts);
+            expect(fakeXHR.addEventListener).toHaveBeenCalledWith('error', expect.any(Function));
+          });
+
+
+          it('should set each header in options', async() => {
+            opts.headers = {
+              header1: 'value1',
+              header2: 'value2',
+            }
+
+            await RessourcesLoader.httpRequest(opts);
+
+            expect(fakeXHR.setRequestHeader).toHaveBeenCalledWith('header1', 'value1');
+            expect(fakeXHR.setRequestHeader).toHaveBeenCalledWith('header2', 'value2');
+          });
+    
         }
-      });
-      fakeXHR.status = 200;
-      await RessourcesLoader.httpRequest(opts);
-      expect(RessourcesLoader.getXMLHttpRequest).toHaveBeenCalled();
-    });
+      );    
+   
 
     describe("should resolve xhr.response for succefull request", () => {
       const statusCases = [...rangeArray(200, 208), 210, 226];
       it.each(statusCases)("when response.status is %s", async (status) => {
         fakeXHR.addEventListener.mockImplementationOnce((evnt, callback) => {
           if (evnt === "load") {
+            fakeXHR.status = status;
             fakeXHR.send.mockImplementationOnce(callback);
           }
         });
-        fakeXHR.status = status;
 
         const response = await RessourcesLoader.httpRequest(opts);
 
@@ -174,15 +210,14 @@ describe("RessourcesLoader", () => {
         });
       });
 
-      it('on error event xhr', async() => {
-        fakeXHR.addEventListener.mockImplementation(
-          (evnt, callback) => {
-            if (evnt === "error") {
-              fakeXHR.send.mockImplementationOnce(callback);
-            }
+      it("on error event xhr", async () => {
+        fakeXHR.addEventListener.mockImplementation((evnt, callback) => {
+          if (evnt === "error") {
+            fakeXHR.send.mockImplementationOnce(callback);
           }
-        );
+        });
         expect.assertions(1);
+
         try {
           await RessourcesLoader.httpRequest(opts);
         } catch (error) {
@@ -193,7 +228,6 @@ describe("RessourcesLoader", () => {
           });
         }
       });
-
     });
   });
 });
